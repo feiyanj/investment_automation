@@ -98,8 +98,22 @@ Remember to:
         print(f"\n🔍 {self.name} analyzing (this may take 30-60 seconds)...")
         
         try:
-            response = self.model.generate_content(full_prompt)
-            analysis = response.text
+            # Generate response based on provider
+            if self.provider == "deepseek":
+                response = self.client.chat.completions.create(
+                    model=self.model_name,
+                    messages=[
+                        {"role": "system", "content": self.system_prompt},
+                        {"role": "user", "content": full_prompt}
+                    ],
+                    temperature=self.temperature,
+                    max_tokens=8192
+                )
+                analysis = response.choices[0].message.content
+            else:
+                # Gemini API
+                response = self.model.generate_content(full_prompt)
+                analysis = response.text
             
             print(f"✅ {self.name} completed analysis")
             

@@ -2,7 +2,7 @@
 
 **Professional AI-powered stock analysis using 6 specialized agents**
 
-Version 3.0.1 | Last Updated: January 29, 2026 | Status: Production Ready ✅
+Version 3.0.2 | Last Updated: January 29, 2026 | Status: Production Ready ✅
 
 ---
 
@@ -53,35 +53,45 @@ python analyze_complete.py AAPL MSFT GOOGL --compare
 # 1. Install dependencies
 pip install -r requirements.txt
 
-# 2. Set API key
-export GOOGLE_AI_API_KEY="your-api-key-here"
+# 2. Set API key (choose one or both)
+# For Google Gemini:
+export GEMINI_API_KEY="your-gemini-api-key"
+
+# For DeepSeek:
+export DEEPSEEK_API_KEY="your-deepseek-api-key"
 
 # 3. Run
 python analyze_complete.py AAPL
 ```
 
-**Requirements**: Python 3.8+, Google AI API key ([Get one here](https://makersuite.google.com/app/apikey))
+**Requirements**: 
+- Python 3.8+
+- API key for at least one provider:
+  - **Gemini API**: [Get here](https://makersuite.google.com/app/apikey) (Free: 250 requests/day)
+  - **DeepSeek API**: [Get here](https://platform.deepseek.com) (Free: 10,000 requests/day)
 
 ---
 
 ## 🤖 AI Models
 
-| Model | Speed | Quality | Quota/Day | Best For |
-|-------|-------|---------|-----------|----------|
-| **gemini-2.5-flash** | Fast | High | 250 | ✅ Default - Most analyses |
-| **gemini-2.5-flash-lite** | Fastest | Good | 1500 | Batch processing (10+ stocks) |
-| **gemini-3-flash-preview** | Fast | Experimental | 1500 | Testing new features |
+| Model | Provider | Speed | Quality | Quota/Day | Best For |
+|-------|----------|-------|---------|-----------|----------|
+| **gemini-2.5-flash** | Google | Fast | High | 250 | ✅ Default - Most analyses |
+| **gemini-2.5-flash-lite** | Google | Fastest | Good | 1500 | Batch processing |
+| **gemini-3-flash-preview** | Google | Fast | Experimental | 1500 | Testing features |
+| **deepseek-chat** | DeepSeek | Fast | High | 10,000 | 🚀 Large batches |
+| **deepseek-reasoner** | DeepSeek | Medium | Excellent | 10,000 | Complex analysis |
 
 ```bash
 # Use specific model
-python analyze_complete.py AAPL --model gemini-2.5-flash-lite
+python analyze_complete.py AAPL --model deepseek-chat
 
-# Batch screen with high-quota model
+# Batch screen with DeepSeek (10K quota!)
 python analyze_complete.py AAPL MSFT GOOGL AMZN \
-    --compare --model gemini-2.5-flash-lite
+    --compare --model deepseek-chat
 ```
 
-**Note**: Each stock uses ~6 API calls (one per agent).
+**Note**: Each stock uses ~6 API calls (one per agent). DeepSeek offers 10,000 requests/day vs Gemini's 250.
 
 ---
 
@@ -155,32 +165,38 @@ investment_analysis/
 
 ## 💡 Pro Tips
 
-**1. Always save important analyses**
+**1. Use DeepSeek for large batches**
+```bash
+# Analyze 20+ stocks without quota worries (10K requests/day!)
+python analyze_complete.py AAPL MSFT GOOGL ... --model deepseek-chat
+```
+
+**2. Always save important analyses**
 ```bash
 python analyze_complete.py AAPL --save --format txt
 ```
 
-**2. Screen first, then deep dive**
+**3. Screen first, then deep dive**
 ```bash
-# Morning: Screen 10 stocks with fast model
+# Morning: Screen 10 stocks with DeepSeek
 python analyze_complete.py A B C D E F G H I J \
-    --compare --model gemini-2.5-flash-lite
+    --compare --model deepseek-chat
 
-# Afternoon: Deep dive top 3 with default model
-python analyze_complete.py TOP_PICK --full --save
+# Afternoon: Deep dive top 3 with reasoner model
+python analyze_complete.py TOP_PICK --full --save --model deepseek-reasoner
 ```
 
-**3. Read long reports interactively**
+**4. Read long reports interactively**
 ```bash
 python analyze_complete.py AAPL --full | less
 ```
 
-**4. Create watchlist automation**
+**5. Create watchlist automation**
 ```bash
 #!/bin/bash
 for ticker in AAPL MSFT GOOGL AMZN META; do
-    python analyze_complete.py "$ticker" --save --format txt
-    sleep 60  # Avoid rate limits
+    python analyze_complete.py "$ticker" --save --format txt --model deepseek-chat
+    sleep 10  # Small delay between requests
 done
 ```
 
@@ -188,11 +204,13 @@ done
 
 ## ⚠️ Rate Limits
 
-| Model | Requests/Min | Requests/Day | Stocks/Day |
-|-------|--------------|--------------|------------|
-| flash | 10 | 250 | ~40 |
-| flash-lite | 15 | 1500 | ~250 |
-| flash-preview | 15 | 1500 | ~250 |
+| Model | Provider | Requests/Min | Requests/Day | Stocks/Day |
+|-------|----------|--------------|--------------|------------|
+| gemini-2.5-flash | Google | 10 | 250 | ~40 |
+| gemini-2.5-flash-lite | Google | 15 | 1500 | ~250 |
+| gemini-3-flash-preview | Google | 15 | 1500 | ~250 |
+| deepseek-chat | DeepSeek | 60 | 10,000 | ~1,600 🚀 |
+| deepseek-reasoner | DeepSeek | 60 | 10,000 | ~1,600 🚀 |
 
 **Tips to avoid limits:**
 - Use `gemini-2.5-flash-lite` for batch processing
@@ -246,9 +264,11 @@ python analyze_complete.py AAPL --full --save
 
 ---
 
-## 🎯 What's New in V3.0.1
+## 🎯 What's New in V3.0.2
 
-✅ **Multi-format extraction** - Works with all 3 models (plain text + markdown tables)  
+✅ **DeepSeek Support** - Added DeepSeek models (10,000 requests/day!)  
+✅ **Multi-provider** - Switch between Gemini and DeepSeek models  
+✅ **Multi-format extraction** - Works with all models (plain text + markdown tables)  
 ✅ **Full report display** - `--full` flag shows complete 30-50K word analysis  
 ✅ **Model selection** - Choose any model via `--model` flag  
 ✅ **Enhanced reliability** - All agents extract correctly from any output format

@@ -1,8 +1,9 @@
 """
 Base Agent Class
-Core agent functionality for interacting with Gemini API
+Core agent functionality for interacting with Gemini and DeepSeek APIs
 """
 import google.generativeai as genai
+from openai import OpenAI
 import time
 from typing import Optional
 from config import Config
@@ -38,13 +39,22 @@ class BaseAgent:
         self.model_name = model_name or Config.DEFAULT_MODEL
         self.temperature = temperature or Config.AGENT_TEMPERATURE
         
-        # Initialize Gemini API
-        self._initialize_gemini()
+        # Determine provider based on model name
+        self.provider = Config.get_model_provider(self.model_name)
+        
+        # Initialize appropriate API
+        if self.provider == "deepseek":
+            self._initialize_deepseek()
+        else:
+            self._initialize_gemini()
         
     def _initialize_gemini(self):
         """Configure and initialize Google Gemini API"""
         # Validate configuration before using API
-        Config.validate()
+        if not Config.GEMINI_API_KEY:
+            raise ValueError(
+                "GEMINI_API_KEY not found. Please add it to your .env file."
+            )
         
         genai.configure(api_key=Config.GEMINI_API_KEY)
         
@@ -62,7 +72,22 @@ class BaseAgent:
             generation_config=generation_config
         )
         
-        print(f"✅ {self.name} initialized with {self.model_name}")
+        print(f"✅ {self.name} initialized with {self.model_name} (Gemini)")
+    
+    def _initialize_deepseek(self):
+        """Configure and initialize DeepSeek API"""
+        if not Config.DEEPSEEK_API_KEY:
+            raise ValueError(
+                "DEEPSEEK_API_KEY not found. Please add it to your .env file."
+            )
+        
+        # Initialize OpenAI client with DeepSeek endpoint
+        self.client = OpenAI(
+            api_key=Config.DEEPSEEK_API_KEY,
+            base_url="https://api.deepseek.com"
+        )
+        
+        print(f"✅ {self.name} initialized with {self.model_name} (DeepSeek)")
     
     def analyze(self, context: str, additional_context: Optional[str] = None) -> str:
         """
@@ -97,9 +122,22 @@ FINANCIAL DATA TO ANALYZE:
 Please provide your analysis now. Be specific, cite numbers from the data, and stay true to your role.
 """
             
-            # Generate response
-            response = self.model.generate_content(full_prompt)
-            analysis = response.text
+            # Generate response based on provider
+            if self.provider == "deepseek":
+                response = self.client.chat.completions.create(
+                    model=self.model_name,
+                    messages=[
+                        {"role": "system", "content": self.system_prompt},
+                        {"role": "user", "content": full_prompt}
+                    ],
+                    temperature=self.temperature,
+                    max_tokens=8192
+                )
+                analysis = response.choices[0].message.content
+            else:
+                # Gemini API
+                response = self.model.generate_content(full_prompt)
+                analysis = response.text
             
             print(f"✅ {self.name} completed analysis")
             

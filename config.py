@@ -15,6 +15,7 @@ class Config:
     
     # API Configuration
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+    DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
     
     # Model Configuration
     DEFAULT_MODEL = "gemini-2.5-flash"
@@ -24,20 +25,37 @@ class Config:
         "1": {
             "name": "gemini-2.5-flash",
             "description": "Gemini 2.5 Flash - Fast and efficient (Default)",
+            "provider": "gemini",
             "rpm": 10,
             "rpd": 250
         },
         "2": {
             "name": "gemini-2.5-flash-lite",
             "description": "Gemini 2.5 Flash Lite - Lighter, faster",
+            "provider": "gemini",
             "rpm": 15,
             "rpd": 1500
         },
         "3": {
             "name": "gemini-3-flash-preview",
             "description": "Gemini 3 Flash Preview - Experimental latest version",
+            "provider": "gemini",
             "rpm": 15,
             "rpd": 1500
+        },
+        "4": {
+            "name": "deepseek-chat",
+            "description": "DeepSeek Chat - Powerful reasoning model",
+            "provider": "deepseek",
+            "rpm": 60,
+            "rpd": 10000
+        },
+        "5": {
+            "name": "deepseek-reasoner",
+            "description": "DeepSeek Reasoner (R1) - Advanced reasoning with CoT",
+            "provider": "deepseek",
+            "rpm": 60,
+            "rpd": 10000
         }
     }
     
@@ -77,17 +95,26 @@ class Config:
     @classmethod
     def validate(cls) -> bool:
         """Validate configuration (call this before using API)"""
-        if not cls.GEMINI_API_KEY:
+        if not cls.GEMINI_API_KEY and not cls.DEEPSEEK_API_KEY:
             raise ValueError(
-                "GEMINI_API_KEY not found in environment variables. "
-                "Please create a .env file with your API key."
+                "No API key found. Please set either GEMINI_API_KEY or DEEPSEEK_API_KEY "
+                "in your .env file."
             )
         return True
     
     @classmethod
     def is_configured(cls) -> bool:
         """Check if API key is configured without raising error"""
-        return cls.GEMINI_API_KEY is not None
+        return cls.GEMINI_API_KEY is not None or cls.DEEPSEEK_API_KEY is not None
+    
+    @classmethod
+    def get_model_provider(cls, model_name: str) -> str:
+        """Get the provider (gemini/deepseek) for a given model name"""
+        for model_info in cls.AVAILABLE_MODELS.values():
+            if model_info["name"] == model_name:
+                return model_info["provider"]
+        # Default to gemini for backward compatibility
+        return "gemini"
 
 
 # Don't validate on import - validate when needed

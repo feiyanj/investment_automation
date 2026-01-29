@@ -231,7 +231,8 @@ Remember to:
         """
         Extract key metrics from the full analysis text
         
-        Handles multiple output formats from different models.
+        Handles multiple output formats from different models (Gemini, DeepSeek).
+        Supports plain text, markdown bold, tables, and emojis.
         
         Args:
             full_analysis: Full text output from analyze()
@@ -239,6 +240,8 @@ Remember to:
         Returns:
             Dictionary with extracted key metrics
         """
+        import re
+        
         summary = {
             'quality_score': None,
             'moat_rating': None,
@@ -249,95 +252,117 @@ Remember to:
             'current_price': None
         }
         
-        lines = full_analysis.split('\n')
-        
-        for line in lines:
-            line_upper = line.upper()
-            
+        try:
             # Quality score - multiple patterns
-            if 'FINANCIAL QUALITY ASSESSMENT' in line_upper and '/' in line:
-                # Pattern: "## 1. FINANCIAL QUALITY ASSESSMENT (8/10 Score)"
-                try:
-                    import re
-                    match = re.search(r'\((\d+)/10', line)
-                    if match:
-                        summary['quality_score'] = int(match.group(1))
-                except:
-                    pass
-            elif 'TOTAL FINANCIAL QUALITY SCORE:' in line_upper or 'QUALITY SCORE' in line_upper:
-                # Pattern: "TOTAL FINANCIAL QUALITY SCORE: 8/10" or "| Financial Quality Score | 8/10 |"
-                try:
-                    import re
-                    match = re.search(r'(\d+)/10', line)
-                    if match:
-                        summary['quality_score'] = int(match.group(1))
-                except:
-                    pass
+            patterns = [
+                r'FINANCIAL QUALITY ASSESSMENT.*?\((\d+)/10',  # (8/10 Score)
+                r'TOTAL FINANCIAL QUALITY SCORE[:\s]+\*?\*?(\d+)/10',  # Score: 8/10 or **8/10**
+                r'\|\s*Financial Quality Score\s*\|\s*(\d+)/10',  # | Financial Quality Score | 8/10 |
+                r'Quality Score[:\s]+\*?\*?(\d+)/10',  # Quality Score: 8/10
+                r'\*\*Quality Score\*\*[:\s]+(\d+)/10',  # **Quality Score**: 8/10
+            ]
+            for pattern in patterns:
+                match = re.search(pattern, full_analysis, re.IGNORECASE | re.DOTALL)
+                if match:
+                    summary['quality_score'] = int(match.group(1))
+                    break
             
-            # Moat rating - multiple patterns
-            if 'MOAT' in line_upper:
-                if 'STRONG' in line_upper:
-                    summary['moat_rating'] = 'Strong'
-                elif 'MEDIUM' in line_upper or 'MODERATE' in line_upper:
-                    summary['moat_rating'] = 'Medium'
-                elif 'WEAK' in line_upper:
-                    summary['moat_rating'] = 'Weak'
-                elif 'NO MOAT' in line_upper or 'NONE' in line_upper:
-                    summary['moat_rating'] = 'None'
+            # Moat rating
+            moat_patterns = [
+                (r'MOAT[:\s]+\*?\*?(STRONG|MEDIUM|MODERATE|WEAK|NONE)\*?\*?', 1),
+                (r'\|\s*Moat\s*\|\s*(STRONG|MEDIUM|MODERATE|WEAK|NONE)', 1),
+                (r'\*\*Moat\*\*[:\s]+(STRONG|MEDIUM|MODERATE|WEAK|NONE)', 1),
+            ]
+            for pattern, group in moat_patterns:
+                match = re.search(pattern, full_analysis, re.IGNORECASE)
+                if match:
+                    moat = match.group(group).upper()
+                    if 'STRONG' in moat:
+                        summary['moat_rating'] = 'Strong'
+                    elif 'MEDIUM' in moat or 'MODERATE' in moat:
+                        summary['moat_rating'] = 'Medium'
+                    elif 'WEAK' in moat:
+                        summary['moat_rating'] = 'Weak'
+                    elif 'NONE' in moat:
+                        summary['moat_rating'] = 'None'
+                    break
             
-            # Recommendation - multiple patterns
-            if 'RECOMMENDATION' in line_upper or ('|' in line and 'REDUCE' in line_upper) or ('|' in line and 'BUY' in line_upper):
-                if 'STRONG BUY' in line_upper:
-                    summary['recommendation'] = 'STRONG BUY'
-                elif 'REDUCE' in line_upper or 'AVOID' in line_upper:
-                    summary['recommendation'] = 'REDUCE'
-                elif 'BUY' in line_upper:
-                    summary['recommendation'] = 'BUY'
-                elif 'HOLD' in line_upper:
-                    summary['recommendation'] = 'HOLD'
-                elif 'SELL' in line_upper:
-                    summary['recommendation'] = 'SELL'
-                
-                # Extract conviction if present
-                if 'CONVICTION' in line_upper:
-                    try:
-                        import re
-                        match = re.search(r'(\d+)/10', line)
-                        if match:
-                            summary['conviction'] = int(match.group(1))
-                    except:
-                        pass
+            # Recommendation - handles emoji + bold markdown
+            rec_patterns = [
+                r'RECOMMENDATION[:\s]+\*?\*?(STRONG BUY|BUY|HOLD|REDUCE|SELL|AVOID)\*?\*?',  # Plain
+                r'🟢\s*\*\*(STRONG BUY|BUY)\*\*',  # 🟢 **BUY**
+                r'🟡\s*\*\*HOLD\*\*',  # 🟡 **HOLD**
+                r'🟠\s*\*\*REDUCE\*\*',  # 🟠 **REDUCE**
+                r'🔴\s*\*\*(SELL|AVOID)\*\*',  # 🔴 **SELL**
+                r'\|\s*Recommendation\s*\|\s*(STRONG BUY|BUY|HOLD|REDUCE|SELL|AVOID)',  # Table
+                r'\*\*Recommendation\*\*[:\s]+\*?\*?(STRONG BUY|BUY|HOLD|REDUCE|SELL|AVOID)\*?\*?',  # **Recommendation**: **BUY**
+            ]
+            for pattern in rec_patterns:
+                match = re.search(pattern, full_analysis, re.IGNORECASE)
+                if match:
+                    rec = match.group(1).upper()
+                    if 'STRONG BUY' in rec:
+                        summary['recommendation'] = 'STRONG BUY'
+                    elif 'BUY' in rec:
+                        summary['recommendation'] = 'BUY'
+                    elif 'HOLD' in rec:
+                        summary['recommendation'] = 'HOLD'
+                    elif 'REDUCE' in rec or 'AVOID' in rec:
+                        summary['recommendation'] = 'REDUCE'
+                    elif 'SELL' in rec:
+                        summary['recommendation'] = 'SELL'
+                    break
             
-            # Margin of safety - multiple patterns
-            if 'MARGIN OF SAFETY' in line_upper:
-                try:
-                    import re
-                    # Pattern: "Margin of Safety | -24.2% |" or "MARGIN OF SAFETY: -24.2%"
-                    match = re.search(r'(-?\d+\.?\d*)%', line)
-                    if match:
-                        summary['margin_of_safety'] = float(match.group(1))
-                except:
-                    pass
+            # Conviction - handles "Level" variant
+            conv_patterns = [
+                r'CONVICTION(?:\s+LEVEL)?[:\s]+\*?\*?(\d+)/10\*?\*?',  # CONVICTION: 8/10 or **8/10**
+                r'\*\*Conviction(?:\s+Level)?\*\*[:\s]+(\d+)/10',  # **Conviction Level**: 8/10
+                r'\|\s*Conviction\s*\|\s*(\d+)/10',  # | Conviction | 8/10 |
+            ]
+            for pattern in conv_patterns:
+                match = re.search(pattern, full_analysis, re.IGNORECASE)
+                if match:
+                    summary['conviction'] = int(match.group(1))
+                    break
             
-            # Intrinsic value - multiple patterns
-            if 'INTRINSIC VALUE' in line_upper:
-                try:
-                    import re
-                    # Pattern: "| Intrinsic Value | $207.90 |" or "Intrinsic Value: $207.90"
-                    match = re.search(r'\$(\d+\.?\d*)', line)
-                    if match:
-                        summary['intrinsic_value'] = float(match.group(1))
-                except:
-                    pass
+            # Margin of safety
+            mos_patterns = [
+                r'MARGIN OF SAFETY[:\s]+\*?\*?([+-]?\d+(?:\.\d+)?)%',
+                r'\*\*Margin of Safety\*\*[:\s]+([+-]?\d+(?:\.\d+)?)%',
+                r'\|\s*Margin of Safety\s*\|\s*([+-]?\d+(?:\.\d+)?)%',
+            ]
+            for pattern in mos_patterns:
+                match = re.search(pattern, full_analysis, re.IGNORECASE)
+                if match:
+                    summary['margin_of_safety'] = float(match.group(1))
+                    break
             
-            # Current price - multiple patterns
-            if 'CURRENT PRICE' in line_upper:
-                try:
-                    import re
-                    match = re.search(r'\$(\d+\.?\d*)', line)
-                    if match:
-                        summary['current_price'] = float(match.group(1))
-                except:
-                    pass
+            # Intrinsic value
+            iv_patterns = [
+                r'INTRINSIC VALUE[:\s]+\*?\*?\$(\d+(?:\.\d+)?)\*?\*?',
+                r'\*\*Intrinsic Value\*\*[:\s]+\$(\d+(?:\.\d+)?)',
+                r'\|\s*Intrinsic Value\s*\|\s*\$(\d+(?:\.\d+)?)',
+                r'Fair Value[:\s]+\$(\d+(?:\.\d+)?)',
+            ]
+            for pattern in iv_patterns:
+                match = re.search(pattern, full_analysis, re.IGNORECASE)
+                if match:
+                    summary['intrinsic_value'] = float(match.group(1))
+                    break
+            
+            # Current price
+            price_patterns = [
+                r'CURRENT PRICE[:\s]+\*?\*?\$(\d+(?:\.\d+)?)\*?\*?',
+                r'\*\*Current Price\*\*[:\s]+\$(\d+(?:\.\d+)?)',
+                r'\|\s*Current Price\s*\|\s*\$(\d+(?:\.\d+)?)',
+            ]
+            for pattern in price_patterns:
+                match = re.search(pattern, full_analysis, re.IGNORECASE)
+                if match:
+                    summary['current_price'] = float(match.group(1))
+                    break
+                    
+        except Exception as e:
+            print(f"Warning: Error extracting value summary: {e}")
         
         return summary

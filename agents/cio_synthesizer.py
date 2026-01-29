@@ -175,23 +175,20 @@ class CIOSynthesizer(BaseAgent):
         
         # Extract Conviction Level (from EXECUTIVE SUMMARY)
         try:
-            # Table format: "| Conviction Level | 6/10 |"
-            conviction_match = re.search(
-                r'\|[^|]*Conviction[^|]*\|[^|]*(\d+)/10[^|]*\|',
-                exec_summary or full_synthesis,
-                re.IGNORECASE
-            )
-            if not conviction_match:
-                # Plain text format
-                conviction_match = re.search(
-                    r'\*?\*?Conviction(?:\s+Level)?\*?\*?:\s*(\d+)/10',
-                    exec_summary or full_synthesis,
-                    re.IGNORECASE
-                )
-            if conviction_match:
-                summary['conviction'] = int(conviction_match.group(1))
-        except:
-            pass
+            # Multiple format support - priority order
+            patterns = [
+                r'\|\s*Conviction\s*(?:Level)?\s*\|\s*(\d+)/10\s*\|',  # Table: | Conviction Level | 6/10 |
+                r'\*\*Conviction(?:\s+Level)?\*\*\s*:\s*(\d+)/10',  # **Conviction Level**: 6/10
+                r'Conviction(?:\s+Level)?\s*:\s*\*?\*?(\d+)/10\*?\*?',  # Conviction Level: 6/10 or **6/10**
+                r'Conviction\s*:\s*(\d+)/10',  # Conviction: 6/10 (simple)
+            ]
+            for pattern in patterns:
+                conviction_match = re.search(pattern, exec_summary or full_synthesis, re.IGNORECASE)
+                if conviction_match:
+                    summary['conviction'] = int(conviction_match.group(1))
+                    break
+        except Exception as e:
+            print(f"Debug: Conviction extraction error: {e}")
         
         try:
             # Extract Position Size (from EXECUTIVE SUMMARY)

@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Output files
+output/
+test_output/
+*.json
+*.txt
+
+# API keys
+.env
+*.key
+
+# macOS
+.DS_Store
+
+# Test results
+.pytest_cache/
+.coverage
+htmlcov/

@@ -142,25 +142,34 @@ class CIOSynthesizer(BaseAgent):
             if rec_match:
                 summary['recommendation'] = rec_match.group(1).upper()
             else:
-                # Plain text format
+                # Plain text format (handles emoji + markdown bold)
                 rec_match = re.search(
-                    r'\*?\*?Final Recommendation\*?\*?:\s*(🟢|🟡|🟠|🔴)?\s*(STRONG BUY|BUY|HOLD|REDUCE|SELL)',
+                    r'\*?\*?Final Recommendation\*?\*?:\s*(🟢|🟡|🟠|🔴)?\s*\*?\*?(STRONG BUY|BUY|HOLD|REDUCE|SELL)\*?\*?',
                     exec_summary or full_synthesis,
                     re.IGNORECASE
                 )
                 if rec_match:
                     summary['recommendation'] = rec_match.group(2).upper()
-                # Fallback to emoji detection
-                elif '🟢 STRONG BUY' in exec_summary:
-                    summary['recommendation'] = 'STRONG BUY'
-                elif '🟢 BUY' in exec_summary:
-                    summary['recommendation'] = 'BUY'
-                elif '🟡 HOLD' in exec_summary:
-                    summary['recommendation'] = 'HOLD'
-                elif '🟠 REDUCE' in exec_summary:
-                    summary['recommendation'] = 'REDUCE'
-                elif '🔴 SELL' in exec_summary:
-                    summary['recommendation'] = 'SELL'
+                else:
+                    # Fallback: Check for "Rating:" line in SECTION 5
+                    rating_match = re.search(
+                        r'\*?\*?Rating\*?\*?:\s*(🟢|🟡|🟠|🔴)?\s*\*?\*?(STRONG BUY|BUY|HOLD|REDUCE|SELL)\*?\*?',
+                        full_synthesis,
+                        re.IGNORECASE
+                    )
+                    if rating_match:
+                        summary['recommendation'] = rating_match.group(2).upper()
+                    # Final fallback to emoji detection
+                    elif '🟢' in exec_summary and 'STRONG BUY' in exec_summary.upper():
+                        summary['recommendation'] = 'STRONG BUY'
+                    elif '🟢' in exec_summary and 'BUY' in exec_summary.upper():
+                        summary['recommendation'] = 'BUY'
+                    elif '🟡' in exec_summary and 'HOLD' in exec_summary.upper():
+                        summary['recommendation'] = 'HOLD'
+                    elif '🟠' in exec_summary and 'REDUCE' in exec_summary.upper():
+                        summary['recommendation'] = 'REDUCE'
+                    elif '🔴' in exec_summary and 'SELL' in exec_summary.upper():
+                        summary['recommendation'] = 'SELL'
         except:
             pass
         
@@ -203,41 +212,60 @@ class CIOSynthesizer(BaseAgent):
                 summary['position_size'] = float(position_match.group(1))
             
             # Extract Expected 3-Year Return (from EXECUTIVE SUMMARY)
-            # Table format: "| Expected 3Y Return | 12.8% |"
-            expected_match = re.search(
-                r'\|[^|]*Expected\s+(?:3-Year|3Y)\s+Return[^|]*\|[^|]*(\d+(?:\.\d+)?)%',
-                exec_summary or full_synthesis,
+            # First try: Probability-weighted format from SECTION 4
+            prob_weighted_match = re.search(
+                r'\*?\*?Expected (?:3-Year|3Y) Return\*?\*?:\s*\*?\*?\+?(\d+(?:\.\d+)?)%\*?\*?',
+                full_synthesis,
                 re.IGNORECASE
             )
-            if not expected_match:
-                # Plain text format with range
+            if prob_weighted_match:
+                summary['expected_return_3y'] = float(prob_weighted_match.group(1))
+            else:
+                # Table format: "| Expected 3Y Return | 12.8% |"
                 expected_match = re.search(
-                    r'\*?\*?Expected (?:3-Year|3Y) Return\*?\*?:\s*\+?(\d+(?:\.\d+)?)%?\s*to\s*\+?(\d+(?:\.\d+)?)%',
+                    r'\|[^|]*Expected\s+(?:3-Year|3Y)\s+Return[^|]*\|[^|]*\+?(\d+(?:\.\d+)?)%',
                     exec_summary or full_synthesis,
                     re.IGNORECASE
                 )
-                if expected_match:
-                    # Average of range
-                    summary['expected_return_3y'] = (float(expected_match.group(1)) + float(expected_match.group(2))) / 2.0
-            else:
-                summary['expected_return_3y'] = float(expected_match.group(1))
+                if not expected_match:
+                    # Plain text format with range (e.g., "+25% to +40%")
+                    expected_match = re.search(
+                        r'\*?\*?Expected (?:3-Year|3Y) Return\*?\*?:\s*\+?(\d+(?:\.\d+)?)%?\s*to\s*\+?(\d+(?:\.\d+)?)%',
+                        exec_summary or full_synthesis,
+                        re.IGNORECASE
+                    )
+                    if expected_match:
+                        # Average of range
+                        summary['expected_return_3y'] = (float(expected_match.group(1)) + float(expected_match.group(2))) / 2.0
+                else:
+                    summary['expected_return_3y'] = float(expected_match.group(1))
             
             # Extract Composite Score
-            # Table format: "| Composite Score | 72/100 |"
+            # First try: "COMPOSITE SCORE: 8.18/10" format
             composite_match = re.search(
-                r'\|[^|]*Composite\s+Score[^|]*\|[^|]*(\d+(?:\.\d+)?)/100',
-                exec_summary or full_synthesis,
+                r'\*?\*?COMPOSITE SCORE\*?\*?:\s*\*?\*?(\d+(?:\.\d+)?)/10\*?\*?',
+                full_synthesis,
                 re.IGNORECASE
             )
-            if not composite_match:
-                # Plain text format
+            if composite_match:
+                # Convert /10 to /100 scale
+                summary['composite_score'] = float(composite_match.group(1)) * 10.0
+            else:
+                # Table format: "| Composite Score | 72/100 |"
                 composite_match = re.search(
-                    r'Composite Score:\s*(\d+(?:\.\d+)?)/100',
-                    full_synthesis,
+                    r'\|[^|]*Composite\s+(?:Quality\s+)?Score[^|]*\|[^|]*(\d+(?:\.\d+)?)/100',
+                    exec_summary or full_synthesis,
                     re.IGNORECASE
                 )
-            if composite_match:
-                summary['composite_score'] = float(composite_match.group(1))
+                if not composite_match:
+                    # Plain text /100 format
+                    composite_match = re.search(
+                        r'Composite\s+(?:Quality\s+)?Score:\s*(\d+(?:\.\d+)?)/100',
+                        full_synthesis,
+                        re.IGNORECASE
+                    )
+                if composite_match:
+                    summary['composite_score'] = float(composite_match.group(1))
             
             # Extract CIO Fair Value
             # Table format: "| CIO Fair Value | $225.50 |"

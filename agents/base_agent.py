@@ -131,7 +131,7 @@ Please provide your analysis now. Be specific, cite numbers from the data, and s
                         {"role": "user", "content": full_prompt}
                     ],
                     temperature=self.temperature,
-                    max_tokens=8192
+                    max_tokens=16384  # Increased for DeepSeek Reasoner (uses tokens for thinking)
                 )
                 analysis = response.choices[0].message.content
             else:

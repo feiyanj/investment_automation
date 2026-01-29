@@ -72,7 +72,7 @@ class GrowthAnalyzer(BaseAgent):
                     {"role": "user", "content": full_prompt}
                 ],
                 temperature=self.temperature,
-                max_tokens=8192
+                max_tokens=16384
             )
             return response.choices[0].message.content
         else:

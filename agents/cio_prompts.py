@@ -45,6 +45,11 @@ KEY PRINCIPLES:
 
 CIO_SYNTHESIS_PROMPT = """As Chief Investment Officer, synthesize the three analytical perspectives and make a final investment decision.
 
+⚠️ CRITICAL REQUIREMENTS:
+1. **Position Sizing Transparency**: You MUST show the formula calculation and explicitly state whether an override was applied. If overriding, you MUST provide specific quantitative justification with exact metrics and historical precedents.
+2. **No Vague Overrides**: Phrases like "exceptional quality" or "rounds up due to conviction" are NOT sufficient. Provide specific metrics (e.g., "ROIC 41.2%, zero debt, sustained for 5 years").
+3. **Consistency**: Similar businesses with similar metrics should receive similar position sizes unless you can articulate a specific, quantifiable difference.
+
 REQUIRED OUTPUT STRUCTURE:
 
 ## SECTION 1: EXECUTIVE SUMMARY (200 words)
@@ -215,15 +220,66 @@ Calculate: (Bull% × Bull Return) + (Base% × Base Return) + (Bear% × Bear Retu
 - Track Record Visibility: [5+ years/3-5 years/1-3 years/<1 year]
 
 ### 5.3 Position Sizing
-**Recommended Position**: X.X% of portfolio
 
-**Position Sizing Logic**:
+**CRITICAL: YOU MUST FOLLOW THIS EXACT TRANSPARENCY PROCESS**
+
+**Step 1: Calculate Formula Position**
+Show your calculation explicitly:
 ```
 Base Position = 5.0% (standard full position)
-× Conviction Multiplier = (Conviction/10) → X.X%
-× Risk Adjustment = (1 - Risk Score/20) → X.X%
-× Opportunity Adjustment = (Upside/40) capped at 1.2 → X.X%
-= FINAL POSITION: X.X%
+× Conviction Multiplier = (conviction_score/10) = X.XX → Y.Y%
+× Risk Adjustment = (1 - risk_score/20) = X.XX → Y.Y%
+× Opportunity Adjustment = (upside%/40, capped at 1.2) = X.XX → Y.Y%
+= FORMULA POSITION: X.X%
+```
+
+**Step 2: Determine If Override Is Warranted**
+
+**You MAY override the formula position ONLY if one of these applies:**
+1. **Balance Sheet Extremes**: 
+   - Zero debt AND ROIC >40% sustained for 3+ years (justifies upward override)
+   - OR Debt/Equity >3x with deteriorating coverage (justifies downward override)
+2. **Binary Catalysts**: 
+   - Major pending event not captured in scores (merger approval/denial, patent expiry, CEO succession)
+3. **Sector-Specific Structural Factors**: 
+   - Regulatory monopoly, proven network effects, or irreplaceable assets
+
+**You MAY NOT override for:**
+- General "quality" or "conviction" feelings beyond the scored metrics
+- Narrative appeal or subjective impressions
+- Personal preference or gut instinct
+- Vague statements like "exceptional business" without specific quantitative support
+
+**Step 3: If Overriding, Provide Full Justification**
+
+If override is warranted, you MUST show:
+```
+OVERRIDE JUSTIFICATION:
+Formula Position: X.X%
+Override Amount: +Y.Y% (or -Y.Y%)
+Override Percentage: +ZZ% (or -ZZ%)
+
+Override Category: [Balance Sheet Extremes / Binary Catalyst / Sector-Specific]
+
+Specific Quantitative Justification:
+- [Metric 1 with exact number]: [Why it's exceptional and justifies override]
+- [Metric 2 with exact number]: [Why it matters to downside protection or upside]
+- [Metric 3 with exact number]: [How this compares to industry/historical norms]
+
+Historical Precedent:
+- [TICKER] ([Date]): Formula X.X%, Final Y.Y%, Override +Z.Z% for [specific reason]
+- This case is similar because: [specific parallel with metrics]
+
+FINAL POSITION: X.X%
+```
+
+**Step 4: No Override Template** (if formula is used as-is)
+```
+POSITION SIZING:
+Formula Position: X.X%
+Override Applied: NO
+Reasoning: Formula appropriately captures risk/reward balance.
+FINAL POSITION: X.X%
 ```
 
 **Position Limits**:
@@ -233,7 +289,9 @@ Base Position = 5.0% (standard full position)
 - Starter Position: 0.5-1.9% (high uncertainty, option value)
 - No Position: 0% (pass/sell)
 
-**Your Position**: X.X% is [appropriate/aggressive/conservative] given...
+**Recommended Position**: X.X% of portfolio
+
+**Your Position Assessment**: X.X% is [appropriate/aggressive/conservative] given [brief summary of why].
 
 ## SECTION 6: EXECUTION PLAN
 

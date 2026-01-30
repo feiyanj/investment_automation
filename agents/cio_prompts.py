@@ -233,54 +233,124 @@ Base Position = 5.0% (standard full position)
 = FORMULA POSITION: X.X%
 ```
 
-**Step 2: Determine If Override Is Warranted**
+**Step 2: Evaluate Override Need (Maximum +150%)**
 
-**You MAY override the formula position ONLY if one of these applies:**
-1. **Balance Sheet Extremes**: 
-   - Zero debt AND ROIC >40% sustained for 3+ years (justifies upward override)
-   - OR Debt/Equity >3x with deteriorating coverage (justifies downward override)
-2. **Binary Catalysts**: 
-   - Major pending event not captured in scores (merger approval/denial, patent expiry, CEO succession)
-3. **Sector-Specific Structural Factors**: 
-   - Regulatory monopoly, proven network effects, or irreplaceable assets
+You have full discretion to override the formula position by up to **+150%** based on exceptional factors. One strong reason can justify a large override - it's about the **STRENGTH** of the insight, not counting checkboxes.
 
-**You MAY NOT override for:**
-- General "quality" or "conviction" feelings beyond the scored metrics
-- Narrative appeal or subjective impressions
-- Personal preference or gut instinct
-- Vague statements like "exceptional business" without specific quantitative support
+**Understanding Override Magnitudes** (Examples, NOT rules):
 
-**Step 3: If Overriding, Provide Full Justification**
+**15-30% Override Examples:**
+- A company with 40%+ ROIC that the formula underweights
+- Zero debt in a capital-intensive industry
+- Dominant market position (>60% share) with pricing power
 
-If override is warranted, you MUST show:
+**30-60% Override Examples:**
+- Network effects moat that creates winner-take-most dynamics
+- Secular tailwind so strong it overshadows formula risks (e.g., AI infrastructure boom)
+- Management with exceptional 10+ year capital allocation track record
+
+**60-100% Override Examples:**
+- Market completely mispricing due to temporary issue (hidden value >50%)
+- Transformational business model shift not captured in historical metrics
+- Combination of fortress balance sheet + pricing power + secular growth creating rare asymmetry
+
+**100-150% Override Examples:**
+- Once-in-5-years generational opportunity (Amazon 2001, Netflix 2012, NVDA 2023 level)
+- Market structure change creating new category winner
+- Any insight so strong you'd bet your reputation on it
+
+**Key Principle:** 
+The size of the override should match the STRENGTH and CONVICTION of your insight, not the number of reasons. One exceptional insight (e.g., "this is the clear AI winner for the next decade") can justify 100%+ override. Three mediocre reasons don't.
+
+**Step 3: Document Your Override Decision**
+
+**If overriding, you MUST provide:**
+
 ```
-OVERRIDE JUSTIFICATION:
 Formula Position: X.X%
-Override Amount: +Y.Y% (or -Y.Y%)
-Override Percentage: +ZZ% (or -ZZ%)
+Override Amount: +Y.Y%
+Override Percentage: +ZZ%
 
-Override Category: [Balance Sheet Extremes / Binary Catalyst / Sector-Specific]
+Core Insight:
+[1-3 sentences: What is the KEY insight that justifies deviating from the formula? 
+What does the market/formula miss about this opportunity?]
 
-Specific Quantitative Justification:
-- [Metric 1 with exact number]: [Why it's exceptional and justifies override]
-- [Metric 2 with exact number]: [Why it matters to downside protection or upside]
-- [Metric 3 with exact number]: [How this compares to industry/historical norms]
+Supporting Evidence:
+[Specific metrics, facts, or context that validate your core insight]
 
-Historical Precedent:
-- [TICKER] ([Date]): Formula X.X%, Final Y.Y%, Override +Z.Z% for [specific reason]
-- This case is similar because: [specific parallel with metrics]
+Why This Override Size:
+[Brief explanation: Why +X% specifically? What level of conviction does this represent?]
+
+Comparable Precedent (if applicable):
+[Reference similar past overrides to show consistency in your thinking]
 
 FINAL POSITION: X.X%
 ```
 
-**Step 4: No Override Template** (if formula is used as-is)
+**If NOT overriding:**
+
 ```
-POSITION SIZING:
 Formula Position: X.X%
 Override Applied: NO
 Reasoning: Formula appropriately captures risk/reward balance.
 FINAL POSITION: X.X%
 ```
+
+**Override Examples for Guidance:**
+
+**Example 1: Single Strong Reason (90% Override)**
+```
+Formula Position: 1.8%
+Override: +1.6% (+90%)
+
+Core Insight: Undisputed AI infrastructure winner with unassailable moat. When a 
+new technology paradigm emerges with a clear category king (80% market share, 
+5-year lead), you bet big.
+
+Supporting Evidence: 80% market share, 45% margins, $30B backlog, ecosystem lock-in
+
+Why This Override Size: NVDA 2023 / CSCO 1998 level dominance. Formula treats 
+this like normal semiconductor, but it's once-in-a-decade positioning.
+
+FINAL POSITION: 3.4%
+```
+
+**Example 2: Different Single Strong Reason (45% Override)**
+```
+Formula Position: 2.0%
+Override: +0.9% (+45%)
+
+Core Insight: Market pricing in permanent impairment, but core economics pristine. 
+Sentiment-driven dislocation, not fundamental deterioration.
+
+Supporting Evidence: Down 40% on CEO fears, but ROIC still 41%, zero debt, 
+international growth tracking 25%
+
+Why This Override Size: Balance sheet makes this asymmetric (limited downside, 
+significant upside). Formula incorporates pessimism but misses safety.
+
+FINAL POSITION: 2.9%
+```
+
+**Example 3: Minimal Override Despite Multiple Factors (20% Override)**
+```
+Formula Position: 2.5%
+Override: +0.5% (+20%)
+
+Core Insight: High quality (9/10 growth, 8/10 value) but fairly priced. Formula 
+is mostly right.
+
+Supporting Evidence: 35% ROIC, strong moat, but only 15% upside to fair value
+
+Why This Override Size: Quality deserves slight premium, but not major mispricing. 
+"Great company at fair price" vs "great company at great price."
+
+FINAL POSITION: 3.0%
+```
+
+**Remember:** One exceptional insight > Three mediocre reasons. Ask yourself: 
+*"What does the market/formula fundamentally misunderstand?"* If your answer is 
+compelling and backed by evidence, large override is warranted.
 
 **Position Limits**:
 - Maximum: 8.0% (exceptional opportunity, low risk, high conviction)

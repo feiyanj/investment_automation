@@ -21,7 +21,8 @@ class BaseAgent:
         role: str,
         system_prompt: str,
         model_name: str = None,
-        temperature: float = None
+        temperature: float = None,
+        agent_type: str = None
     ):
         """
         Initialize an investment agent
@@ -31,16 +32,25 @@ class BaseAgent:
             role: Brief role description
             system_prompt: Detailed instructions for analysis
             model_name: Gemini model to use (default from config)
-            temperature: Creativity level (default from config)
+            temperature: Creativity level (if None, uses config based on agent_type)
+            agent_type: Agent type for temperature lookup (e.g., 'value_hunter', 'cio_synthesizer')
         """
         self.name = name
         self.role = role
         self.system_prompt = system_prompt
         self.model_name = model_name or Config.DEFAULT_MODEL
-        self.temperature = temperature or Config.AGENT_TEMPERATURE
         
         # Determine provider based on model name
         self.provider = Config.get_model_provider(self.model_name)
+        
+        # Get temperature: explicit > agent_type config > old AGENT_TEMPERATURE fallback
+        if temperature is not None:
+            self.temperature = temperature
+        elif agent_type is not None:
+            self.temperature = Config.get_agent_temperature(agent_type, self.model_name)
+        else:
+            # Fallback for backward compatibility
+            self.temperature = getattr(Config, 'AGENT_TEMPERATURE', 0.7)
         
         # Initialize appropriate API
         if self.provider == "deepseek":

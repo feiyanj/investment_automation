@@ -18,20 +18,19 @@ class GrowthAnalyzer(BaseAgent):
     and probabilistic scenario modeling
     """
     
-    def __init__(self, model_name: str = "gemini-2.5-flash", temperature: float = 0.5):
+    def __init__(self, model_name: str = "gemini-2.5-flash"):
         """
-        Initialize Growth Analyzer
+        Initialize Growth Analyzer with qualitative analysis temperature
         
         Args:
             model_name: Which Gemini model to use
-            temperature: Controls creativity (0.5 for balanced growth analysis)
         """
         super().__init__(
             name="Growth Analyzer",
             role="Professional Growth Investment Analyst",
             system_prompt=GROWTH_ANALYZER_SYSTEM_PROMPT,
             model_name=model_name,
-            temperature=temperature
+            agent_type="growth_analyzer"
         )
     
     def analyze(

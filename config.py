@@ -69,8 +69,63 @@ class Config:
     }
     
     # Agent Configuration
-    AGENT_TEMPERATURE = 0.7
     AGENT_DELAY = 15  # Seconds between agent calls
+    
+    # Temperature Configuration by Agent Type
+    # Based on DeepSeek guidance and agent purposes:
+    # - Data Analysis: 1.0 (Business Analyst, Value Hunter, Risk Examiner)
+    # - Math/Coding: 0.0 (Financial calculations)
+    # - General Conversation: 1.3 (Growth Analyzer - more qualitative)
+    # - Synthesis: 0.4 (CIO - balanced consistency + insight)
+    
+    AGENT_TEMPERATURES = {
+        # Analytical agents (data-driven analysis)
+        "business_analyst": 1.0,    # Data analysis of business model
+        "events_analyst": 1.0,       # Data analysis of news events
+        "value_hunter": 1.0,         # Financial data analysis + DCF
+        "risk_examiner": 1.0,        # Risk data analysis
+        
+        # Qualitative agents (judgment-heavy)
+        "growth_analyzer": 1.3,      # Qualitative growth assessment
+        
+        # Synthesis agents (balanced)
+        "cio_synthesizer": 0.4,      # Balanced consistency + insight
+    }
+    
+    # Model-specific temperature overrides (if needed)
+    # Use this to adjust temperatures for specific models
+    MODEL_TEMPERATURE_ADJUSTMENTS = {
+        "deepseek-reasoner": {
+            # DeepSeek Reasoner benefits from higher temp for exploration
+            "cio_synthesizer": 0.5,  # Slightly higher for synthesis
+        },
+        "gemini-3-flash-preview": {
+            # Gemini 3 might need different temps (adjust as needed)
+        }
+    }
+    
+    @classmethod
+    def get_agent_temperature(cls, agent_type: str, model_name: str = None) -> float:
+        """
+        Get the appropriate temperature for an agent type and model.
+        
+        Args:
+            agent_type: Type of agent (e.g., 'business_analyst', 'cio_synthesizer')
+            model_name: Optional model name for model-specific adjustments
+            
+        Returns:
+            Temperature value (0.0-2.0)
+        """
+        # Get base temperature for agent type
+        base_temp = cls.AGENT_TEMPERATURES.get(agent_type, 0.7)  # Default 0.7
+        
+        # Check for model-specific adjustments
+        if model_name and model_name in cls.MODEL_TEMPERATURE_ADJUSTMENTS:
+            model_adjustments = cls.MODEL_TEMPERATURE_ADJUSTMENTS[model_name]
+            if agent_type in model_adjustments:
+                return model_adjustments[agent_type]
+        
+        return base_temp
     
     # Data Fetching Configuration
     PRICE_HISTORY_DAYS = 365

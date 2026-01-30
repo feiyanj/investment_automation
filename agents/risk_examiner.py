@@ -18,20 +18,19 @@ class RiskExaminer(BaseAgent):
     and developing bear case scenarios
     """
     
-    def __init__(self, model_name: str = "gemini-2.5-flash", temperature: float = 0.3):
+    def __init__(self, model_name: str = "gemini-2.5-flash"):
         """
-        Initialize Risk Examiner
+        Initialize Risk Examiner with data analysis temperature
         
         Args:
             model_name: Which Gemini model to use (default: gemini-2.5-flash)
-            temperature: Controls creativity (0.3 for conservative risk assessment)
         """
         super().__init__(
             name="Risk Examiner",
             role="Professional Risk Assessment Analyst",
             system_prompt=RISK_EXAMINER_SYSTEM_PROMPT,
             model_name=model_name,
-            temperature=temperature
+            agent_type="risk_examiner"
         )
     
     def analyze(

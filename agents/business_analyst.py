@@ -33,7 +33,7 @@ class BusinessAnalyst:
             role="Business Understanding Expert",
             system_prompt=BUSINESS_UNDERSTANDING_PROMPT,
             model_name=model_name,
-            temperature=0.7
+            agent_type="business_analyst"
         )
         
         self.events_agent = BaseAgent(
@@ -41,7 +41,7 @@ class BusinessAnalyst:
             role="Material Events Extraction Expert",
             system_prompt=KEY_EVENTS_EXTRACTION_PROMPT,
             model_name=model_name,
-            temperature=0.3  # Lower temperature for factual extraction
+            agent_type="events_analyst"
         )
     
     def analyze_business(self, financial_data: str, company_info: Dict) -> str:

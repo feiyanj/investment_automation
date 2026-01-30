@@ -26,20 +26,19 @@ class ValueHunter(BaseAgent):
     6. Investment recommendation
     """
     
-    def __init__(self, model_name: str = "gemini-2.5-flash", temperature: float = 0.4):
+    def __init__(self, model_name: str = "gemini-2.5-flash"):
         """
-        Initialize Value Hunter with specific temperature for balanced analysis
+        Initialize Value Hunter with data analysis temperature
         
         Args:
             model_name: Gemini model to use (default: gemini-2.5-flash)
-            temperature: 0.4 for rigorous but not overly conservative analysis
         """
         super().__init__(
             name="Value Hunter",
             role="Professional Value Investor",
             system_prompt=VALUE_HUNTER_SYSTEM_PROMPT,
             model_name=model_name,
-            temperature=temperature
+            agent_type="value_hunter"
         )
         
     def analyze(

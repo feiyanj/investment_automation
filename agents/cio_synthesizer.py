@@ -18,20 +18,19 @@ class CIOSynthesizer(BaseAgent):
     by integrating Value Hunter, Growth Analyzer, and Risk Examiner perspectives
     """
     
-    def __init__(self, model_name: str = "gemini-2.5-flash", temperature: float = 0.4):
+    def __init__(self, model_name: str = "gemini-2.5-flash"):
         """
-        Initialize CIO Synthesizer
+        Initialize CIO Synthesizer with balanced synthesis temperature
         
         Args:
             model_name: Which Gemini model to use
-            temperature: Controls creativity (0.4 for balanced but decisive synthesis)
         """
         super().__init__(
             name="CIO Synthesizer",
             role="Chief Investment Officer",
             system_prompt=CIO_SYSTEM_PROMPT,
             model_name=model_name,
-            temperature=temperature
+            agent_type="cio_synthesizer"
         )
     
     def synthesize(

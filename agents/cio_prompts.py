@@ -275,16 +275,12 @@ Base Position = 5.0% (standard full position)
 
 You have full discretion to override the formula position by up to **+150%** based on exceptional factors. One strong reason can justify a large override - it's about the **STRENGTH** of the insight, not counting checkboxes.
 
-**IMPORTANT: Avoid Double-Counting Valuation**
-The Opportunity Adjustment already accounts for valuation (upside to fair value). When considering 
-overrides, focus on factors NOT captured by the formula:
-- Business quality that exceeds what scores suggest (hidden moat strength)
-- Structural advantages the market underappreciates
-- Management capital allocation excellence beyond metrics
-- Secular tailwinds creating long runway
-- Market structure changes or upcoming catalysts
+**Override Principle:**
+When considering overrides, look for factors that are either:
+1. NOT incorporated in the scoring system at all, OR
+2. Too powerful/exceptional to be fully captured by the standard metrics
 
-Do NOT override simply because "it's cheap" - that's already in the Opportunity Adjustment.
+Focus on genuine insights the formula cannot adequately measure, not factors already reflected in scores.
 
 **Understanding Override Magnitudes** (Examples, NOT rules):
 

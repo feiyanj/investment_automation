@@ -310,21 +310,27 @@ def extract_decision_data(analyzer) -> Dict:
     Returns:
         Dictionary with extracted data
     """
-    # Get basic info
+    # Get basic info from results
+    company_info = analyzer.results.get('company_info', {})
     data = {
         'ticker': analyzer.ticker,
-        'company_name': analyzer.info.get('longName', ''),
-        'sector': analyzer.info.get('sector', ''),
-        'current_price': analyzer.info.get('currentPrice', None),
+        'company_name': company_info.get('name', ''),
+        'sector': company_info.get('sector', ''),
+        'current_price': company_info.get('current_price', None),
     }
     
-    # Extract from CIO synthesis (stored in analyzer.cio_analysis)
-    if hasattr(analyzer, 'cio_analysis') and analyzer.cio_analysis:
-        cio = analyzer.cio_analysis
-        
+    # Extract from CIO synthesis
+    cio_synthesis = analyzer.results.get('cio_synthesis', {})
+    cio_decision = cio_synthesis.get('decision', '')
+    cio_full = cio_synthesis.get('full_synthesis', '')
+    
+    # Try to extract from decision summary first, then full synthesis
+    cio_text = cio_decision if cio_decision else cio_full
+    
+    if cio_text:
         # Parse recommendation
-        if 'FINAL RECOMMENDATION' in cio or 'Recommendation:' in cio:
-            for line in cio.split('\n'):
+        if 'FINAL RECOMMENDATION' in cio_text or 'Recommendation:' in cio_text:
+            for line in cio_text.split('\n'):
                 if 'Recommendation:' in line:
                     data['recommendation'] = line.split(':')[1].strip()
                     break
@@ -333,8 +339,8 @@ def extract_decision_data(analyzer) -> Dict:
                     break
         
         # Parse conviction
-        if 'Conviction:' in cio:
-            for line in cio.split('\n'):
+        if 'Conviction:' in cio_text:
+            for line in cio_text.split('\n'):
                 if 'Conviction:' in line:
                     try:
                         conv = line.split(':')[1].strip()
@@ -344,8 +350,8 @@ def extract_decision_data(analyzer) -> Dict:
                     break
         
         # Parse position size
-        if 'Position Size:' in cio:
-            for line in cio.split('\n'):
+        if 'Position Size:' in cio_text:
+            for line in cio_text.split('\n'):
                 if 'Position Size:' in line:
                     try:
                         size = line.split(':')[1].strip()
@@ -355,8 +361,8 @@ def extract_decision_data(analyzer) -> Dict:
                     break
         
         # Parse fair value
-        if 'Fair Value:' in cio or 'CIO Fair Value:' in cio:
-            for line in cio.split('\n'):
+        if 'Fair Value:' in cio_text or 'CIO Fair Value:' in cio_text:
+            for line in cio_text.split('\n'):
                 if 'Fair Value:' in line or 'CIO Fair Value:' in line:
                     try:
                         val = line.split('$')[1].strip().split()[0]
@@ -366,8 +372,8 @@ def extract_decision_data(analyzer) -> Dict:
                     break
         
         # Parse upside
-        if 'Upside:' in cio:
-            for line in cio.split('\n'):
+        if 'Upside:' in cio_text:
+            for line in cio_text.split('\n'):
                 if 'Upside:' in line:
                     try:
                         up = line.split(':')[1].strip()
@@ -377,8 +383,8 @@ def extract_decision_data(analyzer) -> Dict:
                     break
         
         # Parse composite score
-        if 'Composite Score:' in cio:
-            for line in cio.split('\n'):
+        if 'Composite Score:' in cio_text:
+            for line in cio_text.split('\n'):
                 if 'Composite Score:' in line:
                     try:
                         score = line.split(':')[1].strip()
@@ -388,10 +394,11 @@ def extract_decision_data(analyzer) -> Dict:
                     break
     
     # Extract from individual agents
-    if hasattr(analyzer, 'value_analysis') and analyzer.value_analysis:
+    value_analysis = analyzer.results.get('value_analysis', {}).get('full_analysis', '')
+    if value_analysis:
         # Extract quality score
-        if 'Quality Score:' in analyzer.value_analysis:
-            for line in analyzer.value_analysis.split('\n'):
+        if 'Quality Score:' in value_analysis:
+            for line in value_analysis.split('\n'):
                 if 'Quality Score:' in line and '/10' in line:
                     try:
                         score = line.split(':')[1].strip()
@@ -401,8 +408,8 @@ def extract_decision_data(analyzer) -> Dict:
                     break
         
         # Extract moat rating
-        if 'Moat' in analyzer.value_analysis:
-            for line in analyzer.value_analysis.split('\n'):
+        if 'Moat' in value_analysis:
+            for line in value_analysis.split('\n'):
                 if 'Moat Strength' in line or 'YOUR RATING' in line:
                     if 'STRONG' in line.upper():
                         data['moat_rating'] = 'Strong'
@@ -413,16 +420,17 @@ def extract_decision_data(analyzer) -> Dict:
                     break
         
         # Extract value recommendation
-        if 'RECOMMENDATION:' in analyzer.value_analysis:
-            for line in analyzer.value_analysis.split('\n'):
+        if 'RECOMMENDATION:' in value_analysis:
+            for line in value_analysis.split('\n'):
                 if line.strip().startswith('**RECOMMENDATION'):
                     data['value_rec'] = line.split(':')[1].strip().split()[0]
                     break
     
-    if hasattr(analyzer, 'risk_analysis') and analyzer.risk_analysis:
+    risk_analysis = analyzer.results.get('risk_analysis', {}).get('full_analysis', '')
+    if risk_analysis:
         # Extract risk score
-        if 'Risk Score:' in analyzer.risk_analysis:
-            for line in analyzer.risk_analysis.split('\n'):
+        if 'Risk Score:' in risk_analysis:
+            for line in risk_analysis.split('\n'):
                 if 'Risk Score:' in line and '/10' in line:
                     try:
                         score = line.split(':')[1].strip()
@@ -432,8 +440,8 @@ def extract_decision_data(analyzer) -> Dict:
                     break
         
         # Extract risk rating
-        if 'RISK RATING:' in analyzer.risk_analysis or 'Risk Rating:' in analyzer.risk_analysis:
-            for line in analyzer.risk_analysis.split('\n'):
+        if 'RISK RATING:' in risk_analysis or 'Risk Rating:' in risk_analysis:
+            for line in risk_analysis.split('\n'):
                 if 'Risk Rating:' in line or 'RISK RATING:' in line:
                     rating = line.split(':')[1].strip()
                     data['risk_rating'] = rating.split('(')[0].strip()

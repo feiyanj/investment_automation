@@ -86,8 +86,8 @@ class Config:
         "risk_examiner": 1.0,        # Risk data analysis
         
         # Qualitative agents (judgment-heavy)
-        "growth_analyzer": 1.3,      # Qualitative growth assessment
-        
+        "growth_analyzer": 1.0,      # Qualitative growth assessment
+
         # Synthesis agents (balanced)
         "cio_synthesizer": 0.4,      # Balanced consistency + insight
     }
@@ -95,13 +95,20 @@ class Config:
     # Model-specific temperature overrides (if needed)
     # Use this to adjust temperatures for specific models
     MODEL_TEMPERATURE_ADJUSTMENTS = {
+        "gemini-3-flash-preview": {
+            # Gemini 3 is optimized for temp=1.0 (prevents loops, better reasoning)
+            # Per Chinese documentation: temperature should be fixed at 1.0
+            "business_analyst": 1.0,
+            "events_analyst": 1.0,
+            "value_hunter": 1.0,
+            "risk_examiner": 1.0,
+            "growth_analyzer": 1.0,
+            "cio_synthesizer": 1.0,
+        },
         "deepseek-reasoner": {
             # DeepSeek Reasoner benefits from higher temp for exploration
             "cio_synthesizer": 0.5,  # Slightly higher for synthesis
         },
-        "gemini-3-flash-preview": {
-            # Gemini 3 might need different temps (adjust as needed)
-        }
     }
     
     @classmethod

@@ -70,7 +70,7 @@ class BaseAgent:
         
         # Configure generation settings
         generation_config = {
-            "temperature": 1.0 if "gemini-3" in self.model_name else self.temperature,  # Gemini 3 optimized for temp=1.0
+            "temperature": self.temperature,  # Now controlled via Config.AGENT_TEMPERATURES
             "top_p": 0.95,
             "top_k": 40,
             "max_output_tokens": 32768,  # Increased for comprehensive DCF analysis with all sections
@@ -96,7 +96,7 @@ class BaseAgent:
         
         print(f"✅ {self.name} initialized with {self.model_name} (Gemini)")
         if "gemini-3" in self.model_name:
-            print(f"   📊 Gemini 3 settings: temperature=1.0, thinking_level=high (default)")
+            print(f"   📊 Gemini 3 settings: temperature={self.temperature}, thinking_level=high (default)")
     
     def _initialize_deepseek(self):
         """Configure and initialize DeepSeek API"""
@@ -148,6 +148,10 @@ Please provide your analysis now. Be specific, cite numbers from the data, and s
             
             # Generate response based on provider
             if self.provider == "deepseek":
+                # Set max_tokens based on model type
+                # DeepSeek Reasoner needs more tokens for reasoning chains + output
+                max_tokens = 32768 if "reasoner" in self.model_name.lower() else 16384
+                
                 response = self.client.chat.completions.create(
                     model=self.model_name,
                     messages=[
@@ -155,7 +159,7 @@ Please provide your analysis now. Be specific, cite numbers from the data, and s
                         {"role": "user", "content": full_prompt}
                     ],
                     temperature=self.temperature,
-                    max_tokens=16384  # Increased for DeepSeek Reasoner (uses tokens for thinking)
+                    max_tokens=max_tokens
                 )
                 analysis = response.choices[0].message.content
             else:

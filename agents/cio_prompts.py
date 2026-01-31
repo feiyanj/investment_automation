@@ -122,21 +122,47 @@ List 2-4 areas of conflict and YOUR RESOLUTION:
 
 ## SECTION 3: INTEGRATED SCORING
 
-### 3.1 Composite Quality Score
-Calculate weighted average:
-- Value Quality Score: X/10 × 30% = X.XX
-- Growth Quality Score: X/10 × 35% = X.XX
-- Risk Score (inverted): (10-X)/10 × 35% = X.XX
+### 3.1 Valuation Score (NEW - Calculate First)
+
+**CRITICAL: Calculate valuation score based on current price vs CIO Fair Value**
+
+```
+Upside to Fair Value = (CIO Fair Value - Current Price) / Current Price × 100%
+
+Valuation Score = 5.0 + (Upside% / 8)
+
+Examples:
+- At Fair Value (0% upside):     5.0/10 (neutral)
+- 20% undervalued (+20% upside): 7.5/10 (attractive)
+- 40% undervalued (+40% upside): 10.0/10 (very attractive)
+- 20% overvalued (-20% upside):  2.5/10 (expensive)
+- 40% overvalued (-40% upside):  0.0/10 (very expensive)
+
+Formula: Valuation Score = 5.0 + (Upside%/8), capped at 0-10
+```
+
+**Calculate for this stock**:
+- Current Price: $XX
+- CIO Fair Value: $XX
+- Upside to Fair Value: +XX% (or -XX% if overvalued)
+- **Valuation Score**: X.X/10
+
+### 3.2 Composite Quality Score
+Calculate weighted average INCLUDING valuation:
+- Value Quality Score: X/10 × 25% = X.XX
+- Growth Quality Score: X/10 × 30% = X.XX
+- Risk Score (inverted): (10-X)/10 × 25% = X.XX
+- Valuation Score: X/10 × 20% = X.XX
 - **COMPOSITE SCORE**: X.XX/10
 
 **Interpretation**: 
-- 8.0-10.0: Exceptional quality
-- 6.0-7.9: High quality
-- 4.0-5.9: Average quality
-- 2.0-3.9: Below average
-- 0.0-1.9: Poor quality
+- 8.0-10.0: Exceptional (high quality + attractive valuation)
+- 6.0-7.9: High quality (good business, reasonable valuation)
+- 4.0-5.9: Average (mixed quality or fair valuation)
+- 2.0-3.9: Below average (quality concerns or expensive)
+- 0.0-1.9: Poor (avoid - quality issues and/or severe overvaluation)
 
-### 3.2 Valuation Assessment
+### 3.3 Valuation Assessment Detail
 - **Intrinsic Value Range**: $XX - $XX (Value Hunter)
 - **Current Price**: $XX
 - **Discount to Intrinsic Value**: XX% (using midpoint)
@@ -145,7 +171,7 @@ Calculate weighted average:
 - **CIO Fair Value**: $XX (your synthesized estimate)
 - **Upside to Fair Value**: +XX%
 
-### 3.3 Risk-Return Profile
+### 3.4 Risk-Return Profile
 - **Upside Potential**: +XX% (bull case weighted by probability)
 - **Downside Risk**: -XX% (bear case weighted by probability)
 - **Upside/Downside Ratio**: X.Xx:1
@@ -229,9 +255,14 @@ Show your calculation explicitly:
 Base Position = 5.0% (standard full position)
 × Conviction Multiplier = (conviction_score/10) = X.XX → Y.Y%
 × Risk Adjustment = (1 - risk_score/20) = X.XX → Y.Y%
-× Opportunity Adjustment = (upside%/40, capped at 1.2) = X.XX → Y.Y%
+× Opportunity Adjustment = (upside_to_fair_value%/40, capped at 1.2) = X.XX → Y.Y%
 = FORMULA POSITION: X.X%
 ```
+
+**CRITICAL: Use "Upside to Fair Value" NOT "Expected Return"**
+- Upside to Fair Value = (CIO Fair Value - Current Price) / Current Price
+- Example: If current price $77.80, fair value $95.00 → Use +22.1%
+- Do NOT use probability-weighted expected return (that's already in conviction score)
 
 **Step 2: Evaluate Override Need (Maximum +150%)**
 

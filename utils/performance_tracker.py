@@ -312,6 +312,10 @@ def extract_decision_data(analyzer) -> Dict:
     """
     # Get basic info from results
     company_info = analyzer.results.get('company_info', {})
+    cio_synthesis = analyzer.results.get('cio_synthesis', {})
+    decision = cio_synthesis.get('decision', {})
+    
+    # Start with basic company info
     data = {
         'ticker': analyzer.ticker,
         'company_name': company_info.get('name', ''),
@@ -319,79 +323,46 @@ def extract_decision_data(analyzer) -> Dict:
         'current_price': company_info.get('current_price', None),
     }
     
-    # Extract from CIO synthesis
-    cio_synthesis = analyzer.results.get('cio_synthesis', {})
-    cio_decision = cio_synthesis.get('decision', '')
-    cio_full = cio_synthesis.get('full_synthesis', '')
+    # Extract from structured decision dictionary (preferred method)
+    if decision:
+        data['recommendation'] = decision.get('recommendation', '')
+        data['conviction'] = decision.get('conviction', None)
+        data['position_size'] = decision.get('position_size', None)
+        data['fair_value'] = decision.get('cio_fair_value', None)
+        data['upside_percent'] = decision.get('upside_to_fair_value', None)
+        data['composite_score'] = decision.get('composite_score', None)
+        data['expected_return_3y'] = decision.get('expected_return_3y', None)
+        data['stop_loss'] = decision.get('stop_loss', None)
+        data['key_catalyst'] = decision.get('key_catalyst', '')
+        
+        # Entry range
+        if decision.get('entry_price_low') and decision.get('entry_price_high'):
+            data['intrinsic_value_range'] = f"${decision.get('entry_price_low'):.2f}-${decision.get('entry_price_high'):.2f}"
     
-    # Try to extract from decision summary first, then full synthesis
-    cio_text = cio_decision if cio_decision else cio_full
-    
-    if cio_text:
-        # Parse recommendation
-        if 'FINAL RECOMMENDATION' in cio_text or 'Recommendation:' in cio_text:
-            for line in cio_text.split('\n'):
-                if 'Recommendation:' in line:
-                    data['recommendation'] = line.split(':')[1].strip()
-                    break
-                elif 'RECOMMENDATION:' in line:
-                    data['recommendation'] = line.split(':')[1].strip().split()[0]
-                    break
-        
-        # Parse conviction
-        if 'Conviction:' in cio_text:
-            for line in cio_text.split('\n'):
-                if 'Conviction:' in line:
-                    try:
-                        conv = line.split(':')[1].strip()
-                        data['conviction'] = float(conv.split('/')[0])
-                    except:
-                        pass
-                    break
-        
-        # Parse position size
-        if 'Position Size:' in cio_text:
-            for line in cio_text.split('\n'):
-                if 'Position Size:' in line:
-                    try:
-                        size = line.split(':')[1].strip()
-                        data['position_size'] = float(size.replace('%', ''))
-                    except:
-                        pass
-                    break
-        
-        # Parse fair value
-        if 'Fair Value:' in cio_text or 'CIO Fair Value:' in cio_text:
-            for line in cio_text.split('\n'):
-                if 'Fair Value:' in line or 'CIO Fair Value:' in line:
-                    try:
-                        val = line.split('$')[1].strip().split()[0]
-                        data['fair_value'] = float(val.replace(',', ''))
-                    except:
-                        pass
-                    break
-        
-        # Parse upside
-        if 'Upside:' in cio_text:
-            for line in cio_text.split('\n'):
-                if 'Upside:' in line:
-                    try:
-                        up = line.split(':')[1].strip()
-                        data['upside_percent'] = float(up.replace('%', '').replace('+', ''))
-                    except:
-                        pass
-                    break
-        
-        # Parse composite score
-        if 'Composite Score:' in cio_text:
-            for line in cio_text.split('\n'):
-                if 'Composite Score:' in line:
-                    try:
-                        score = line.split(':')[1].strip()
-                        data['composite_score'] = float(score.split('/')[0])
-                    except:
-                        pass
-                    break
+    # Fallback: parse from text if structured data not available
+    else:
+        cio_full = cio_synthesis.get('full_synthesis', '')
+        if cio_full:
+            # Parse recommendation
+            if 'FINAL RECOMMENDATION' in cio_full or 'Recommendation:' in cio_full:
+                for line in cio_full.split('\n'):
+                    if 'Recommendation:' in line:
+                        data['recommendation'] = line.split(':')[1].strip()
+                        break
+                    elif 'RECOMMENDATION:' in line:
+                        data['recommendation'] = line.split(':')[1].strip().split()[0]
+                        break
+            
+            # Parse conviction
+            if 'Conviction:' in cio_full:
+                for line in cio_full.split('\n'):
+                    if 'Conviction:' in line:
+                        try:
+                            conv = line.split(':')[1].strip()
+                            data['conviction'] = float(conv.split('/')[0])
+                        except:
+                            pass
+                        break
     
     # Extract from individual agents
     value_analysis = analyzer.results.get('value_analysis', {}).get('full_analysis', '')

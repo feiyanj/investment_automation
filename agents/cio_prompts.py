@@ -205,6 +205,16 @@ Base your scenario probabilities on conviction level and thesis clarity:
 - Bull Case: 30-40% (wide range of outcomes)
 - Bear Case: 30-40% (significant risk)
 
+**For Boundary Conviction Levels** (e.g., 4.5, 7.5):
+- **Conviction 7.0-7.9**: Blend Medium/High → Base 55-65%, Bull 23-30%, Bear 12-20%
+  - Example (7.5): Base 60%, Bull 27%, Bear 13% (leans toward high conviction)
+- **Conviction 4.0-4.9**: Blend Low/Medium → Base 45-55%, Bull 27-37%, Bear 17-27%
+  - Example (4.5): Base 50%, Bull 32%, Bear 18% (balanced between low/medium)
+- **Conviction 2.0-2.9**: Blend Very Low/Low → Base 35-45%, Bull 30-40%, Bear 25-35%
+  - Example (2.5): Base 40%, Bull 35%, Bear 25% (high uncertainty)
+
+**Rule of Thumb**: Round to nearest guideline tier, or interpolate linearly if precision matters.
+
 **Adjustments**:
 - **Defensive Business** (Staples, Healthcare): Reduce bear probability by 5%
 - **Cyclical Business** (Industrials, Materials): Increase bear probability by 5%

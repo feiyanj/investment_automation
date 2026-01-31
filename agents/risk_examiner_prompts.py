@@ -556,17 +556,106 @@ Develop 5 specific bear case scenarios:
 
 ### 6.1 Overall Risk Score (0-10 Scale)
 
-Synthesize all risk factors:
+**COMPREHENSIVE RISK SCORE CALCULATION**
 
-**Component Scores**:
-- Financial Red Flags Impact: ___/10 (0 flags = 0, 1-2 = 3, 3-5 = 6, >5 = 9)
-- Business Model Risk: ___/10 (from section 2: Total Score ___/60, normalized to 0-10 scale = score/6)
-- Management/Governance Risk: ___/10 (Low = 2, Medium = 5, High = 8)
-- Valuation Risk: ___/10 (Low = 2, Medium = 5, High = 8)
-- Bear Case Severity: ___/10 (Expected downside: <15% = 2, 15-30% = 5, >30% = 8)
+This formula comprehensively captures ALL risk dimensions while allowing flexibility for unique/unforeseen risks.
+
+**Step 1: Calculate Component Scores**
+
+**A. Financial Red Flags Impact** (0-10):
+- Formula: min(10, red_flag_count × 2.0)
+- 0 flags = 0/10 (pristine)
+- 1-2 flags = 2-4/10 (minor concerns)
+- 3-5 flags = 6-10/10 (significant concerns)
+- >5 flags = 10/10 (major red flags, capped)
+- **Your Score**: ___ flags × 2.0 = ___/10
+
+**B. Business Model Risk** (0-10):
+- Formula: Total Business Model Risk Score / 6
+- From Section 2: Total ___/60 → Normalized ___/10
+- Captures: Competition, Customer, Regulatory, Technology, Supply Chain, Macro
+- **Your Score**: ___/60 ÷ 6 = ___/10
+
+**C. Management/Governance Risk** (0-10):
+- Low Risk = 2/10 (stable, aligned, high ownership)
+- Medium Risk = 5/10 (adequate, some concerns)
+- High Risk = 8/10 (turnover, poor capital allocation, misalignment)
+- **Your Score**: ___/10
+
+**D. Valuation Risk** (0-10):
+- Low Risk = 2/10 (trading at or below fair value, margin of safety)
+- Medium Risk = 5/10 (fairly valued, limited margin of safety)
+- High Risk = 8/10 (overvalued, no margin of safety, multiple compression risk)
+- **Your Score**: ___/10
+
+**E. Bear Case Severity** (0-10):
+- Formula based on probability-weighted bear downside:
+  - <15% downside = 2/10 (limited downside)
+  - 15-30% downside = 5/10 (moderate downside)
+  - 30-50% downside = 7/10 (significant downside)
+  - >50% downside = 9/10 (severe downside)
+- **Your Score**: ___% downside → ___/10
+
+**F. Unforeseen/Unique Risk Assessment** (0-10):
+This category captures risks NOT adequately reflected in the above components:
+- **Black Swan Events**: Low-probability, high-impact events (fraud, major lawsuit, catastrophic failure)
+- **Industry-Specific Anomalies**: Unique risks specific to this company/industry not covered above
+- **Emerging Threats**: New competitive/technological/regulatory threats not yet materialized
+- **Hidden Leverage**: Off-balance-sheet risks, derivatives, pension obligations beyond normal assessment
+- **Execution Risks**: Key person dependency, integration risks, turnaround difficulty
+
+**Scoring Guidelines**:
+- 0-1/10: No significant unforeseen risks identified
+- 2-3/10: Minor unique risks (e.g., key person dependency, moderate acquisition integration)
+- 4-6/10: Material unique risks (e.g., major pending litigation, regulatory investigation)
+- 7-8/10: Severe unique risks (e.g., existential regulatory threat, major fraud allegations)
+- 9-10/10: Catastrophic unique risks (e.g., confirmed fraud, going concern warning, bankruptcy imminent)
+
+**Your Assessment**:
+- Identified Unforeseen Risks: [List if any, or "None identified"]
+- **Unforeseen Risk Score**: ___/10
+- **Rationale**: [1-2 sentences explaining this score]
+
+---
+
+**Step 2: Calculate Weighted Formula Score**
+
+**Standard Weighting**:
+- Financial Red Flags: ___/10 × 15% = ___
+- Business Model Risk: ___/10 × 35% = ___
+- Management Risk: ___/10 × 15% = ___
+- Valuation Risk: ___/10 × 15% = ___
+- Bear Case Severity: ___/10 × 10% = ___
+- Unforeseen/Unique Risks: ___/10 × 10% = ___
+**= FORMULA RISK SCORE: ___/10**
+
+---
+
+**Step 3: Catastrophic Risk Override**
+
+If ANY SINGLE factor represents CATASTROPHIC risk, override formula to reflect severity:
+
+**Automatic Override Triggers** (use the higher score):
+- ⚠️ **Fraud/Restatement Confirmed**: Set Overall Risk = 9.0
+- ⚠️ **Going Concern Warning**: Set Overall Risk = 9.5
+- ⚠️ **Major Regulatory Shutdown Threat**: Set Overall Risk = 8.5-9.0
+- ⚠️ **Bankruptcy/Insolvency Risk**: Set Overall Risk = 9.0-9.5
+- ⚠️ **Criminal Investigation (Company/CEO)**: Set Overall Risk = 8.5-9.0
+- ⚠️ **Existential Competitive Disruption**: Set Overall Risk = 8.0-8.5
+
+**Override Applied?**: YES / NO
+- If YES, specify: [Which trigger? What evidence?]
+- If YES, override score: ___/10
+
+---
 
 **OVERALL RISK SCORE: ___/10**
-(Average of 5 component scores)
+(Formula Score ___ OR Override Score ___, whichever is HIGHER)
+
+**Calculation Transparency**:
+- Method: [Formula / Overridden due to: ___]
+- Formula Score: ___/10
+- Final Score: ___/10
 
 **Interpretation**:
 - 0-2: Minimal Risk (rare - highest quality companies)

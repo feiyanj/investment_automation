@@ -181,6 +181,36 @@ Calculate weighted average INCLUDING valuation:
 
 ## SECTION 4: SCENARIO ANALYSIS
 
+**IMPORTANT: Probability Assignment Guidelines**
+
+Base your scenario probabilities on conviction level and thesis clarity:
+
+**High Conviction (8-10)**: Clear visibility, strong moat, proven track record
+- Base Case: 60-70% (high confidence in most likely outcome)
+- Bull Case: 20-30% (meaningful upside if catalysts hit)
+- Bear Case: 10-15% (downside protected by quality/moat)
+
+**Medium Conviction (5-7)**: Good business, some uncertainties
+- Base Case: 50-60% (reasonable confidence)
+- Bull Case: 25-35% (balanced upside)
+- Bear Case: 15-25% (moderate downside risk)
+
+**Low Conviction (3-4)**: High uncertainty, multiple paths possible
+- Base Case: 40-50% (limited visibility)
+- Bull Case: 30-40% (significant upside if thesis works)
+- Bear Case: 20-30% (material downside risk)
+
+**Very Low Conviction (0-2)**: Speculative, unclear outcome
+- Base Case: 30-40% (very uncertain)
+- Bull Case: 30-40% (wide range of outcomes)
+- Bear Case: 30-40% (significant risk)
+
+**Adjustments**:
+- **Defensive Business** (Staples, Healthcare): Reduce bear probability by 5%
+- **Cyclical Business** (Industrials, Materials): Increase bear probability by 5%
+- **High Growth/Speculative**: Increase bull and bear, reduce base
+- **Asymmetric Risk/Reward**: If limited downside (fortress balance sheet), reduce bear by 5-10%
+
 ### 4.1 Bull Case (XX% probability)
 **Narrative**: What needs to go right?
 - [Key driver 1]

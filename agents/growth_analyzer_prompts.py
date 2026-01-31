@@ -309,8 +309,8 @@ Create three probabilistic scenarios:
 **Scenario Description**: [What has to go right?]
 
 **Key Assumptions**:
-- Revenue Growth (next 5 years): ___% CAGR
-- Operating Margin (Year 5): ___%
+- Revenue Growth (next 3 years): ___% CAGR
+- Operating Margin (Year 3): ___%
 - Multiple Expansion: Yes/No (from ___x to ___x)
 
 **Drivers**:
@@ -319,13 +319,13 @@ Create three probabilistic scenarios:
 3. [Market expands faster than expected]
 
 **Financial Projections**:
-- Year 5 Revenue: $___ billion (vs $___ billion today)
-- Year 5 Earnings: $___ billion
-- Year 5 FCF: $___ billion
+- Year 3 Revenue: $___ billion (vs $___ billion today)
+- Year 3 Earnings: $___ billion
+- Year 3 FCF: $___ billion
 
 **Valuation**:
 - Exit Multiple: ___x (P/E or EV/EBITDA)
-- Target Price (5-year): $___
+- Target Price (3-year): $___
 - Total Return: +___%
 - Annualized Return: ___%
 
@@ -336,8 +336,8 @@ Create three probabilistic scenarios:
 **Scenario Description**: [Most likely outcome]
 
 **Key Assumptions**:
-- Revenue Growth (next 5 years): ___% CAGR
-- Operating Margin (Year 5): ___%
+- Revenue Growth (next 3 years): ___% CAGR
+- Operating Margin (Year 3): ___%
 - Multiple: Stable/Slight expansion/compression
 
 **Drivers**:
@@ -346,13 +346,13 @@ Create three probabilistic scenarios:
 3. [Execution on plan]
 
 **Financial Projections**:
-- Year 5 Revenue: $___ billion
-- Year 5 Earnings: $___ billion
-- Year 5 FCF: $___ billion
+- Year 3 Revenue: $___ billion
+- Year 3 Earnings: $___ billion
+- Year 3 FCF: $___ billion
 
 **Valuation**:
 - Exit Multiple: ___x
-- Target Price (5-year): $___
+- Target Price (3-year): $___
 - Total Return: +___%
 - Annualized Return: ___%
 
@@ -363,8 +363,8 @@ Create three probabilistic scenarios:
 **Scenario Description**: [What could go wrong?]
 
 **Key Assumptions**:
-- Revenue Growth (next 5 years): ___% CAGR (may be low or negative)
-- Operating Margin (Year 5): ___% (may compress)
+- Revenue Growth (next 3 years): ___% CAGR (may be low or negative)
+- Operating Margin (Year 3): ___% (may compress)
 - Multiple Compression: Yes/No (from ___x to ___x)
 
 **Risks**:
@@ -373,13 +373,13 @@ Create three probabilistic scenarios:
 3. [Market saturation]
 
 **Financial Projections**:
-- Year 5 Revenue: $___ billion
-- Year 5 Earnings: $___ billion
-- Year 5 FCF: $___ billion
+- Year 3 Revenue: $___ billion
+- Year 3 Earnings: $___ billion
+- Year 3 FCF: $___ billion
 
 **Valuation**:
 - Exit Multiple: ___x
-- Target Price (5-year): $___
+- Target Price (3-year): $___
 - Total Return: ___% (may be negative)
 - Annualized Return: ___%
 
@@ -391,7 +391,7 @@ Create three probabilistic scenarios:
 - Bull (30%) × ___% = ___%
 - Base (50%) × ___% = ___%
 - Bear (20%) × ___% = ___%
-- **Expected 5-Year Return**: ___%
+- **Expected 3-Year Return**: ___%
 - **Expected Annualized Return**: ___%
 
 **Risk/Reward**:
@@ -472,7 +472,7 @@ Unsustainable growth or excessive downside risk.
 | Historical Growth Quality | __/10 | [Exceptional/High/Acceptable/Poor] |
 | Market Space Score | __/10 | [Massive/Strong/Moderate/Limited] |
 | Growth Sustainability | __/10 | [Highly sustainable/Sustainable/Questionable] |
-| Expected 5Y Return | __% | [Attractive/Acceptable/Weak] |
+| Expected 3Y Return | __% | [Attractive/Acceptable/Weak] |
 | Bull Case (30%) | +__% | [Upside scenario] |
 | Base Case (50%) | +__% | [Most likely] |
 | Bear Case (20%) | __% | [Downside risk] |

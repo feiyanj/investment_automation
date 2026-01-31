@@ -351,7 +351,7 @@ WACC = (E/V × Cost of Equity) + (D/V × Cost of Debt × (1 - Tax Rate))
 
 Inputs:
 - Latest FCF: $___ billion
-- Growth rate (next 5 years): ___%
+- Growth rate (next 3 years): ___%
 - Terminal growth rate: 3% (long-term GDP growth)
 - Discount rate (WACC): ___%
 - Shares outstanding: ___ billion

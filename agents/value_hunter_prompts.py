@@ -345,93 +345,126 @@ WACC = (E/V × Cost of Equity) + (D/V × Cost of Debt × (1 - Tax Rate))
 
 ---
 
-### 4.3 Multi-Method Valuation
+### 4.3 DCF Intrinsic Valuation (Primary Method)
 
-**Method 1: Discounted Cash Flow (DCF)**
+**IMPORTANT**: Use DCF as the PRIMARY and ONLY method for calculating intrinsic value.
+Warren Buffett: "The value of any stock is the present value of all its future cash flows, 
+discounted at an appropriate rate." DCF is the ONLY truly objective valuation method.
+
+**Base Case DCF Calculation:**
 
 Inputs:
 - Latest FCF: $___ billion
-- Growth rate (next 3 years): ___%
+- Growth rate (next 5 years): ___%
 - Terminal growth rate: 3% (long-term GDP growth)
 - Discount rate (WACC): ___%
 - Shares outstanding: ___ billion
 
-Calculation:
-[Show your 2-stage DCF calculation or request the DCF module to calculate]
+**Step-by-Step DCF Calculation**:
 
-**DCF Intrinsic Value Per Share**: $___
+Year 1 FCF: $___ billion × (1 + ___%) = $___ billion, PV = $___ billion
+Year 2 FCF: $___ billion × (1 + ___%) = $___ billion, PV = $___ billion
+Year 3 FCF: $___ billion × (1 + ___%) = $___ billion, PV = $___ billion
+Year 4 FCF: $___ billion × (1 + ___%) = $___ billion, PV = $___ billion
+Year 5 FCF: $___ billion × (1 + ___%) = $___ billion, PV = $___ billion
 
----
+**Total PV of 5-Year FCF**: $___ billion
 
-**Method 2: P/E Multiple Valuation**
+**Terminal Value Calculation**:
+Year 6 FCF = Year 5 × (1 + 3%) = $___ billion
+Terminal Value = $___ billion / (WACC - 3%) = $___ billion
+PV of Terminal Value = $___ billion / (1 + WACC)^5 = $___ billion
 
-Analysis:
-- Current P/E ratio: ___
-- 5-year average P/E ratio: ___
-- Industry average P/E: ___ (if known)
-- Justified P/E based on growth and quality: ___
-
-Logic:
-- High-quality (score 8-10), high-growth (>15%): P/E 25-35 justified
-- High-quality (score 8-10), moderate-growth (10-15%): P/E 18-25 justified
-- High-quality (score 8-10), low-growth (<10%): P/E 12-18 justified
-- Medium-quality (score 5-7): Reduce above by 30%
-- Low-quality (score <5): Reduce above by 50%
-
-Your Justified P/E: ___
-Target EPS (next 12 months): $___
-**P/E Intrinsic Value**: $___ per share
+**Total Enterprise Value**: $___ billion (5-year PV + Terminal PV)
+**Intrinsic Value Per Share**: $___ / ___ billion shares = **$___**
 
 ---
 
-**Method 3: P/FCF Multiple Valuation**
+### 4.4 DCF Sensitivity Analysis
 
-Analysis:
-- Current Price/FCF ratio: ___
-- 5-year average P/FCF ratio: ___
-- Justified P/FCF based on growth: ___
+Show how intrinsic value changes with different assumptions:
 
-Logic:
-- High growth (>15%), high quality: P/FCF 25-35 reasonable
-- Moderate growth (10-15%), high quality: P/FCF 18-25 reasonable
-- Low growth (<10%), high quality: P/FCF 12-18 reasonable
-- Adjust down for lower quality
+**Sensitivity Table (Intrinsic Value per Share)**:
 
-Your Justified P/FCF: ___
-Latest FCF per share: $___
-**P/FCF Intrinsic Value**: $___ per share
+```
+Growth Rate →     8%      10%      12%      14%      16%
+WACC ↓
+ 9%            $___    $___    $___    $___    $___
+10%            $___    $___    $___    $___    $___
+11%            $___    $___    $___    $___    $___
+12%            $___    $___    $___    $___    $___
+```
+
+**Scenario Analysis**:
+- **Conservative** (___% growth, ___% WACC): $___
+- **Base Case** (___% growth, ___% WACC): $___
+- **Optimistic** (___% growth, ___% WACC): $___
+
+**Intrinsic Value Range**: $___  to  $___
 
 ---
 
-### 4.4 Weighted Average Intrinsic Value
+### 4.5 Reverse DCF Analysis
 
-Weight the three methods based on business characteristics:
+**What is the MARKET pricing in at current price of $___ ?**
 
-**If stable, cash-generative business** (utilities, consumer staples):
-- DCF: 40%, P/E: 30%, P/FCF: 30%
+Working backwards from current price:
+- If WACC = ___%:
+  - Implied perpetual growth: ___%
+  - OR implied 5-year growth (with 3% terminal): ___%
 
-**If growth business with some uncertainty**:
-- DCF: 30%, P/E: 40%, P/FCF: 30%
+**Market's Implied Assumptions**:
+[Explain what growth rate or discount rate the market is using]
 
-**If highly cyclical or volatile** (commodities, tech):
-- DCF: 25%, P/E: 25%, P/FCF: 50% (focus on actual cash)
+**Your View vs Market**:
+- Your assumption: ___% growth, ___% WACC → Intrinsic value $___
+- Market assumption: ___% growth → Current price $___
+- **Conclusion**: Market is [too pessimistic / too optimistic / fairly pricing] growth prospects
 
-**YOUR WEIGHTING**:
-- DCF (___%) × $___  = $___
-- P/E (___%) × $___  = $___
-- P/FCF (___%) × $___ = $___
+---
 
-**WEIGHTED INTRINSIC VALUE**: $___ per share
+### 4.6 Market Context (Informational Only - NOT Used for Valuation)
+
+**IMPORTANT**: The following multiples are shown for CONTEXT about market sentiment, 
+NOT as independent valuation methods. They help explain market psychology but suffer 
+from circular reasoning (using market prices to justify different market prices).
+
+**Current Market Multiples**:
+- P/E Ratio: ___ (vs 5-year avg: ___, vs industry: ___)
+- P/FCF Ratio: ___ (vs 5-year avg: ___, vs industry: ___)
+- P/B Ratio: ___ (vs 5-year avg: ___)
+- EV/EBITDA: ___ (vs 5-year avg: ___)
+
+**Interpretation**:
+[Explain what current multiples tell you about market sentiment. Examples:]
+- "P/E of 33x vs historical 28x suggests market is optimistic about earnings quality"
+- "P/FCF of 14x vs historical 20x suggests market doubts FCF sustainability"
+- "High P/E but low P/FCF indicates market trusts earnings more than cash flow"
+
+**Market Narrative**:
+[What is the market's story? Premium or discount? Why?]
+
+**Peer Comparison** (if available):
+- Company P/E ___ vs Peers avg ___
+- Company P/FCF ___ vs Peers avg ___
+- [Premium or discount? Justified by quality/growth differences?]
+
+**NOTE**: These multiples are useful for understanding market psychology and timing, 
+but DCF intrinsic value is the ONLY number used for investment decision.
 
 ================================================================================
 ## 5. MARGIN OF SAFETY ANALYSIS
 ================================================================================
 
 **Current Stock Price**: $___ per share
-**Intrinsic Value (Weighted)**: $___ per share
+**Intrinsic Value (DCF Base Case)**: $___ per share
+**Intrinsic Value Range (Sensitivity)**: $___ to $___ per share
 **Margin of Safety**: (Intrinsic - Current) / Intrinsic = ___%
 
 ### Interpretation & Recommendation
+
+**CRITICAL**: Base your recommendation on DCF intrinsic value, NOT on multiples.
+Consider the sensitivity range to account for uncertainty in assumptions.
 
 **If MOS > 40% AND Quality ≥ 8 AND Strong Moat**:
 → **🟢 STRONG BUY**
@@ -501,10 +534,13 @@ Create a clean summary table:
 | Financial Quality Score | __/10 | [Excellent/Good/Fair/Poor] |
 | Moat Strength | [Strong/Medium/Weak/None] | [One-line summary] |
 | Current Price | $__ | - |
-| Intrinsic Value | $__ | [DCF/P/E/P/FCF weighted] |
+| DCF Intrinsic Value (Base) | $__ | [Based on __% growth, __% WACC] |
+| DCF Range (Sensitivity) | $__ - $__ | [Conservative to Optimistic] |
 | Margin of Safety | __% | [Attractive/Fair/Insufficient] |
 | Recommendation | [STRONG BUY/BUY/HOLD/SELL] | Conviction: __/10 |
 | Position Size | __% | [Core/Standard/Small/None] |
+| Market P/E (Context) | __x | [vs historical: __x, peer: __x] |
+| Market P/FCF (Context) | __x | [vs historical: __x, peer: __x] |
 
 ================================================================================
 
@@ -512,11 +548,16 @@ Create a clean summary table:
 
 Remember:
 - Ground every statement in the 5-year data provided
-- Show your calculations and reasoning
+- Show your DCF calculations step-by-step
+- Use DCF as the PRIMARY and ONLY valuation for investment decisions
+- Show sensitivity analysis to account for uncertainty
+- Use reverse DCF to understand market's implied assumptions
+- Show multiples for CONTEXT about market sentiment, not for valuation
 - Be rigorous and conservative (margin of safety mindset)
 - Admit uncertainty when data is insufficient
 - Focus on quality first, valuation second
 - Never recommend a low-quality business just because it's "cheap"
+- Remember: "Price is what you pay, value is what you get" (Buffett)
 """
 
 

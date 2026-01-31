@@ -70,11 +70,23 @@ class BaseAgent:
         
         # Configure generation settings
         generation_config = {
-            "temperature": self.temperature,
+            "temperature": 1.0 if "gemini-3" in self.model_name else self.temperature,  # Gemini 3 optimized for temp=1.0
             "top_p": 0.95,
             "top_k": 40,
-            "max_output_tokens": 8192,
+            "max_output_tokens": 32768,  # Increased for comprehensive DCF analysis with all sections
         }
+        
+        # Note: thinking_level parameter requires v1alpha API or new google.genai package
+        # The current google.generativeai package (deprecated) may not support it
+        # Gemini 3 defaults to 'high' thinking level if not specified
+        # TODO: Migrate to google.genai package to explicitly set thinking_level="high"
+        
+        # For now, we rely on Gemini 3's default 'high' thinking level
+        # Once migrated to google.genai:
+        # if "gemini-3" in self.model_name:
+        #     config = types.GenerateContentConfig(
+        #         thinking_config=types.ThinkingConfig(thinking_level="high")
+        #     )
         
         # Initialize the model
         self.model = genai.GenerativeModel(
@@ -83,6 +95,8 @@ class BaseAgent:
         )
         
         print(f"✅ {self.name} initialized with {self.model_name} (Gemini)")
+        if "gemini-3" in self.model_name:
+            print(f"   📊 Gemini 3 settings: temperature=1.0, thinking_level=high (default)")
     
     def _initialize_deepseek(self):
         """Configure and initialize DeepSeek API"""

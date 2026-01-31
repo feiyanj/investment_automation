@@ -320,10 +320,30 @@ class InvestmentAnalyzer:
 
 
 def analyze_single_stock(ticker: str, save: bool = False, format: str = "json", 
-                        model: str = None, show_full: bool = False):
+                        model: str = None, show_full: bool = False, log_decision: bool = False):
     """Analyze a single stock"""
     analyzer = InvestmentAnalyzer(ticker, verbose=True, model_name=model)
     results = analyzer.analyze()
+    
+    # Log decision for performance tracking (only if explicitly requested)
+    if log_decision:
+        from utils.performance_tracker import PerformanceTracker, extract_decision_data
+        tracker = PerformanceTracker()
+        
+        # Extract decision data
+        decision_data = extract_decision_data(analyzer)
+        decision_data['model'] = model or analyzer.model_name
+        
+        # Add output file if saved
+        if save:
+            timestamp = analyzer.timestamp
+            if format == "txt":
+                decision_data['output_file'] = f"output/{ticker}_{timestamp}.txt"
+            else:
+                decision_data['output_file'] = f"output/{ticker}_{timestamp}.json"
+        
+        # Log the decision
+        tracker.log_decision(decision_data)
     
     # Display full reports if requested
     if show_full:
@@ -461,6 +481,8 @@ Examples:
     parser.add_argument('--model', type=str, default=None,
                        help=f'AI model to use (default: {Config.DEFAULT_MODEL}). '
                             f'Options: gemini-2.5-flash, gemini-2.5-flash-lite, gemini-3-flash-preview')
+    parser.add_argument('--log', action='store_true',
+                       help='Log decision to performance tracker for later review')
     
     args = parser.parse_args()
     
@@ -474,7 +496,7 @@ Examples:
     try:
         if len(args.tickers) == 1:
             analyze_single_stock(args.tickers[0], save=args.save, format=args.format, 
-                               model=args.model, show_full=args.full)
+                               model=args.model, show_full=args.full, log_decision=args.log)
         else:
             analyze_multiple_stocks(args.tickers, save=args.save, compare=args.compare, 
                                   model=args.model, show_full=args.full)

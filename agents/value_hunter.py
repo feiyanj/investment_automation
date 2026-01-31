@@ -109,10 +109,37 @@ Remember to:
                     max_tokens=16384
                 )
                 analysis = response.choices[0].message.content
+                
+                # Check finish reason
+                finish_reason = response.choices[0].finish_reason
+                if finish_reason != "stop":
+                    print(f"⚠️  Warning: Response finished with reason: {finish_reason}")
+                    if finish_reason == "length":
+                        print("   Response may be incomplete due to token limit")
+                
             else:
                 # Gemini API
                 response = self.model.generate_content(full_prompt)
                 analysis = response.text
+                
+                # Check for incomplete response
+                if hasattr(response, 'candidates') and response.candidates:
+                    candidate = response.candidates[0]
+                    if hasattr(candidate, 'finish_reason'):
+                        finish_reason = candidate.finish_reason
+                        # finish_reason: 0=FINISH_REASON_UNSPECIFIED, 1=STOP, 2=MAX_TOKENS, 3=SAFETY, 4=RECITATION, 5=OTHER
+                        if finish_reason != 1:  # Not STOP
+                            print(f"⚠️  Warning: Gemini response finish_reason: {finish_reason}")
+                            if finish_reason == 2:
+                                print("   Response incomplete: MAX_TOKENS reached")
+                            elif finish_reason == 3:
+                                print("   Response blocked by SAFETY filters")
+                            elif finish_reason == 4:
+                                print("   Response blocked by RECITATION check")
+                
+                # Check response length
+                if len(analysis) < 2000:
+                    print(f"⚠️  Warning: Response is very short ({len(analysis)} chars)")
             
             print(f"✅ {self.name} completed analysis")
             

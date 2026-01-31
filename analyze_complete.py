@@ -336,7 +336,11 @@ def analyze_single_stock(ticker: str, save: bool = False, format: str = "json",
         
         # Add output file if saved
         if save:
-            timestamp = analyzer.timestamp
+            # Get timestamp from results and format for filename
+            timestamp_iso = results.get('timestamp', datetime.now().isoformat())
+            # Convert ISO format to filename format: 20260131_031405
+            timestamp = datetime.fromisoformat(timestamp_iso).strftime('%Y%m%d_%H%M%S')
+            
             if format == "txt":
                 decision_data['output_file'] = f"output/{ticker}_{timestamp}.txt"
             else:

@@ -185,35 +185,25 @@ Calculate weighted average INCLUDING valuation:
 
 Base your scenario probabilities on conviction level and thesis clarity:
 
-**High Conviction (8-10)**: Clear visibility, strong moat, proven track record
+**High Conviction (7.5-10)**: Clear visibility, strong moat, proven track record
 - Base Case: 60-70% (high confidence in most likely outcome)
 - Bull Case: 20-30% (meaningful upside if catalysts hit)
 - Bear Case: 10-15% (downside protected by quality/moat)
 
-**Medium Conviction (5-7)**: Good business, some uncertainties
+**Medium Conviction (5.0-7.4)**: Good business, some uncertainties
 - Base Case: 50-60% (reasonable confidence)
 - Bull Case: 25-35% (balanced upside)
 - Bear Case: 15-25% (moderate downside risk)
 
-**Low Conviction (3-4)**: High uncertainty, multiple paths possible
+**Low Conviction (3.0-4.9)**: High uncertainty, multiple paths possible
 - Base Case: 40-50% (limited visibility)
 - Bull Case: 30-40% (significant upside if thesis works)
 - Bear Case: 20-30% (material downside risk)
 
-**Very Low Conviction (0-2)**: Speculative, unclear outcome
+**Very Low Conviction (0-2.9)**: Speculative, unclear outcome
 - Base Case: 30-40% (very uncertain)
 - Bull Case: 30-40% (wide range of outcomes)
 - Bear Case: 30-40% (significant risk)
-
-**For Boundary Conviction Levels** (e.g., 4.5, 7.5):
-- **Conviction 7.0-7.9**: Blend Medium/High → Base 55-65%, Bull 23-30%, Bear 12-20%
-  - Example (7.5): Base 60%, Bull 27%, Bear 13% (leans toward high conviction)
-- **Conviction 4.0-4.9**: Blend Low/Medium → Base 45-55%, Bull 27-37%, Bear 17-27%
-  - Example (4.5): Base 50%, Bull 32%, Bear 18% (balanced between low/medium)
-- **Conviction 2.0-2.9**: Blend Very Low/Low → Base 35-45%, Bull 30-40%, Bear 25-35%
-  - Example (2.5): Base 40%, Bull 35%, Bear 25% (high uncertainty)
-
-**Rule of Thumb**: Round to nearest guideline tier, or interpolate linearly if precision matters.
 
 **Adjustments**:
 - **Defensive Business** (Staples, Healthcare): Reduce bear probability by 5%

@@ -72,6 +72,10 @@ class DataFetcherV3:
             print("  ├─ Fetching comprehensive news (8 queries)...")
             self.data['news'] = self._get_comprehensive_news()
             
+            # Validate data quality (check for stock splits, unreasonable P/E ratios)
+            print("  ├─ Validating data quality...")
+            self._validate_data_quality()
+            
             print(f"✅ [V3.0] Data collection complete for {self.ticker}")
             print(f"    └─ {len(self.data['news'])} news articles collected")
             
@@ -100,7 +104,24 @@ class DataFetcherV3:
             elif 'regularMarketPrice' in info:
                 current_price = float(info.get('regularMarketPrice', 0))
             
-            return {
+            # Check for recent stock splits and add warning
+            split_warning = None
+            try:
+                actions = self.stock.actions
+                if not actions.empty and 'Stock Splits' in actions.columns:
+                    from datetime import timezone
+                    six_months_ago = pd.Timestamp.now(tz=actions.index.tz) - pd.Timedelta(days=180)
+                    recent_splits = actions[actions.index > six_months_ago]
+                    splits = recent_splits[recent_splits['Stock Splits'] > 0]
+                    
+                    if not splits.empty:
+                        for date, row in splits.iterrows():
+                            split_ratio = row['Stock Splits']
+                            split_warning = f"CRITICAL: {split_ratio}:1 stock split on {date.strftime('%Y-%m-%d')}. Use provided trailingPE and trailingEps values - DO NOT calculate EPS manually from historical financials as they may not be split-adjusted."
+            except:
+                pass
+            
+            result = {
                 'name': info.get('longName', 'N/A'),
                 'longName': info.get('longName', 'N/A'),
                 'sector': info.get('sector', 'N/A'),
@@ -112,8 +133,29 @@ class DataFetcherV3:
                 'city': info.get('city', 'N/A'),
                 'currentPrice': current_price,
                 'regularMarketPrice': current_price,
-                'price': current_price
+                'price': current_price,
+                # Add valuation metrics (CRITICAL: prevents agents from miscalculating P/E)
+                'trailingPE': info.get('trailingPE'),
+                'forwardPE': info.get('forwardPE'),
+                'trailingEps': info.get('trailingEps'),
+                'forwardEps': info.get('forwardEps'),
+                'pegRatio': info.get('pegRatio'),
+                'priceToBook': info.get('priceToBook'),
+                'priceToSalesTrailing12Months': info.get('priceToSalesTrailing12Months'),
+                'enterpriseToRevenue': info.get('enterpriseToRevenue'),
+                'enterpriseToEbitda': info.get('enterpriseToEbitda'),
+                # Add profitability metrics
+                'profitMargins': info.get('profitMargins'),
+                'operatingMargins': info.get('operatingMargins'),
+                'returnOnAssets': info.get('returnOnAssets'),
+                'returnOnEquity': info.get('returnOnEquity')
             }
+            
+            # Add stock split warning if detected
+            if split_warning:
+                result['STOCK_SPLIT_WARNING'] = split_warning
+            
+            return result
         except Exception as e:
             print(f"⚠️  Could not fetch company info: {e}")
             return {}
@@ -868,3 +910,65 @@ Key Quality Metrics:
 """
         
         return output
+    
+    def _validate_data_quality(self) -> None:
+        """
+        Validate data quality and warn about potential issues
+        
+        Checks for:
+        - Recent stock splits that may affect historical data
+        - Unreasonable P/E ratios (< 3 or > 200)
+        - Missing critical valuation metrics
+        """
+        try:
+            company_info = self.data.get('company_info', {})
+            
+            # Check for recent stock splits (last 6 months)
+            try:
+                actions = self.stock.actions
+                if not actions.empty and 'Stock Splits' in actions.columns:
+                    # Get timezone-aware datetime for comparison
+                    from datetime import timezone
+                    six_months_ago = pd.Timestamp.now(tz=actions.index.tz) - pd.Timedelta(days=180)
+                    
+                    recent_splits = actions[actions.index > six_months_ago]
+                    splits = recent_splits[recent_splits['Stock Splits'] > 0]
+                    
+                    if not splits.empty:
+                        for date, row in splits.iterrows():
+                            split_ratio = row['Stock Splits']
+                            print(f"    ⚠️  WARNING: Recent {split_ratio}:1 stock split on {date.strftime('%Y-%m-%d')}")
+                            print(f"    └─ Historical financials may need manual adjustment")
+            except Exception as e:
+                # Silently continue if we can't check splits
+                pass
+            
+            # Validate P/E ratio
+            trailing_pe = company_info.get('trailingPE')
+            current_price = company_info.get('currentPrice', 0)
+            
+            if trailing_pe is not None:
+                if trailing_pe < 3:
+                    print(f"    ⚠️  WARNING: Extremely low P/E ratio ({trailing_pe:.1f}x)")
+                    print(f"    └─ This may indicate data quality issues or terminal business decline")
+                elif trailing_pe > 200:
+                    print(f"    ⚠️  WARNING: Extremely high P/E ratio ({trailing_pe:.1f}x)")
+                    print(f"    └─ Company may be unprofitable or in hyper-growth phase")
+            else:
+                print(f"    ⚠️  WARNING: P/E ratio not available from data provider")
+                print(f"    └─ Analysts will need to calculate manually from financials")
+            
+            # Validate EPS data
+            trailing_eps = company_info.get('trailingEps')
+            if trailing_eps is not None and current_price > 0:
+                calculated_pe = current_price / trailing_eps
+                if trailing_pe is not None and abs(calculated_pe - trailing_pe) > 1.0:
+                    print(f"    ⚠️  WARNING: P/E calculation mismatch")
+                    print(f"    └─ Reported P/E: {trailing_pe:.1f}x, Calculated: {calculated_pe:.1f}x")
+            
+        except Exception as e:
+            print(f"    ⚠️  Could not validate data quality: {e}")
+
+    # =========================================================================
+    # FORMATTING FOR LLM CONSUMPTION
+    # =========================================================================

@@ -106,7 +106,7 @@ Remember to:
                         {"role": "user", "content": full_prompt}
                     ],
                     temperature=self.temperature,
-                    max_tokens=16384
+                    max_tokens=32768  # DeepSeek Reasoner max output tokens
                 )
                 analysis = response.choices[0].message.content
                 
@@ -313,16 +313,23 @@ Remember to:
                         summary['moat_rating'] = 'None'
                     break
             
-            # Recommendation - handles emoji + bold markdown
+            # Recommendation - handles emoji + bold markdown + table formats
             rec_patterns = [
+                # Standard formats
                 r'RECOMMENDATION[:\s]+\*?\*?(STRONG BUY|BUY|HOLD|REDUCE|SELL|AVOID)\*?\*?',  # Plain
                 r'🟢\s*\*\*(STRONG BUY|BUY)\*\*',  # 🟢 **BUY**
                 r'🟡\s*\*\*HOLD\*\*',  # 🟡 **HOLD**
                 r'🟠\s*\*\*REDUCE\*\*',  # 🟠 **REDUCE**
                 r'🔴\s*\*\*(SELL|AVOID)\*\*',  # 🔴 **SELL**
-                r'\|\s*Recommendation\s*\|\s*(STRONG BUY|BUY|HOLD|REDUCE|SELL|AVOID)',  # Table
+                r'\|\s*Recommendation\s*\|\s*\*?\*?(STRONG BUY|BUY|HOLD|REDUCE|SELL|AVOID)\*?\*?\s*\|',  # Table: | Recommendation | BUY |
                 r'\*\*Recommendation\*\*[:\s]+\*?\*?(STRONG BUY|BUY|HOLD|REDUCE|SELL|AVOID)\*?\*?',  # **Recommendation**: **BUY**
+                # Arrow formats
+                r'→\s*\*\*🟢\s*(STRONG BUY|BUY)\*\*',  # → **🟢 BUY**
+                r'→\s*\*\*🟡\s*HOLD\*\*',  # → **🟡 HOLD**
+                r'→\s*\*\*🟠\s*REDUCE\*\*',  # → **🟠 REDUCE**
+                r'→\s*\*\*🔴\s*(SELL|AVOID)\*\*',  # → **🔴 SELL**
             ]
+            
             for pattern in rec_patterns:
                 match = re.search(pattern, full_analysis, re.IGNORECASE)
                 if match:

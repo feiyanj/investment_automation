@@ -1,3 +1,4 @@
 timestamp,date,ticker,company_name,sector,model,recommendation,conviction,position_size,current_price,fair_value,upside_percent,intrinsic_value_range,margin_of_safety,quality_score,moat_rating,risk_score,risk_rating,expected_return_3y,composite_score,value_rec,growth_rec,risk_rec,analyst_agreement,key_catalyst,stop_loss,output_file,notes
-2026-01-31T02:11:49.678723,2026-01-31,TEST,Test Company,Technology,gemini-3-flash-preview,BUY,8.5,5.0,150.0,200.0,33.3,,,9.0,,,,,8.5,,,,,,,,
-2026-01-31T04:02:00.932838,2026-01-31,NFLX,"Netflix, Inc.",Communication Services,deepseek-reasoner,UNKNOWN,,,83.48999786376953,,,,,,,,,,,,,,,,,output/NFLX_20260131_040200.txt,
+2026-01-31T16:09:08.592395,2026-01-31,NFLX,"Netflix, Inc.",Communication Services,gemini-3-flash-preview,HOLD,6.0,1.0,83.48999786376953,72.0,0.0,,,,Strong,,,5.0,6.08,,,,,,0.0,output/NFLX_20260131_160908.txt,
+2026-01-31T16:37:16.778854,2026-01-31,NFLX,"Netflix, Inc.",Communication Services,gemini-2.5-flash-lite,STRONG BUY,8.0,4.0,83.48999786376953,222.44,0.0,,,,,,,51.0,0.0,,,,,,0.0,output/NFLX_20260131_163716.txt,
+2026-01-31T16:54:56.357342,2026-01-31,NFLX,"Netflix, Inc.",Communication Services,deepseek-reasoner,BUY,6.5,2.5,83.48999786376953,0.0,0.0,,,,Medium,,,20.0,7.19,,,,,,0.0,output/NFLX_20260131_165456.txt,

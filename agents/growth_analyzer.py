@@ -71,7 +71,7 @@ class GrowthAnalyzer(BaseAgent):
                     {"role": "user", "content": full_prompt}
                 ],
                 temperature=self.temperature,
-                max_tokens=16384
+                max_tokens=32768  # DeepSeek Reasoner max output tokens
             )
             return response.choices[0].message.content
         else:

@@ -479,7 +479,7 @@ Rationale: Good business at attractive valuation. Margin provides downside prote
 Position Sizing: 3-5% of portfolio (standard position)
 
 **If MOS > 10% AND Quality ≥ 6**:
-→ **🟡 HOLD/ACCUMULATE**
+→ **🟡 HOLD**
 Conviction: MEDIUM (5-6/10)
 Rationale: Fairly valued but not compelling. Wait for better entry or accumulate slowly.
 Position Sizing: 2-3% of portfolio (small position)
@@ -491,20 +491,20 @@ Rationale: Roughly fair value. No margin of safety. Hold if you own, don't initi
 Position Sizing: Hold existing, don't add
 
 **If MOS < 0% to -20%**:
-→ **🟠 REDUCE/AVOID**
+→ **🟠 REDUCE**
 Conviction: LOW (2-3/10)
 Rationale: Modestly overvalued. Limited upside, meaningful downside.
 Position Sizing: Trim to <2% or exit
 
 **If MOS < -20%**:
-→ **🔴 SELL/AVOID**
+→ **🔴 SELL**
 Conviction: NONE (0-2/10)
 Rationale: Significantly overvalued. High risk, low reward.
-Position Sizing: Exit position or avoid entirely
+Position Sizing: Exit position immediately
 
 ### Your Final Recommendation
 
-**RECOMMENDATION**: [Choose one from above]
+**RECOMMENDATION**: [Choose ONE: STRONG BUY | BUY | HOLD | REDUCE | SELL]
 **CONVICTION LEVEL**: ___/10
 **POSITION SIZE**: ___%
 **PRICE TARGET (12-month)**: $___
@@ -537,7 +537,7 @@ Create a clean summary table:
 | DCF Intrinsic Value (Base) | $__ | [Based on __% growth, __% WACC] |
 | DCF Range (Sensitivity) | $__ - $__ | [Conservative to Optimistic] |
 | Margin of Safety | __% | [Attractive/Fair/Insufficient] |
-| Recommendation | [STRONG BUY/BUY/HOLD/SELL] | Conviction: __/10 |
+| Recommendation | [STRONG BUY/BUY/HOLD/REDUCE/SELL] | Conviction: __/10 |
 | Position Size | __% | [Core/Standard/Small/None] |
 | Market P/E (Context) | __x | [vs historical: __x, peer: __x] |
 | Market P/FCF (Context) | __x | [vs historical: __x, peer: __x] |

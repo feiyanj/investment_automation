@@ -255,9 +255,16 @@ Show your calculation explicitly:
 Base Position = 5.0% (standard full position)
 × Conviction Multiplier = (conviction_score/10) = X.XX → Y.Y%
 × Risk Adjustment = (1 - risk_score/20) = X.XX → Y.Y%
-× Opportunity Adjustment = (upside_to_fair_value%/40, capped at 1.2) = X.XX → Y.Y%
+× Opportunity Adjustment = min(1.5, 0.5 + upside_to_fair_value%/20) = X.XX → Y.Y%
 = FORMULA POSITION: X.X%
 ```
+
+**Opportunity Adjustment Formula Explained:**
+- Formula: min(1.5, 0.5 + upside_to_fair_value% / 20)
+- 0% upside → 0.5x (50% cut for overvalued stocks)
+- 10% upside → 1.0x (neutral for fairly valued stocks)
+- 20% upside → 1.5x (50% boost for undervalued quality stocks)
+- 30%+ upside → 1.5x (capped to prevent excessive sizing)
 
 **CRITICAL: Use "Upside to Fair Value" NOT "Expected Return"**
 - Upside to Fair Value = (CIO Fair Value - Current Price) / Current Price
@@ -268,17 +275,28 @@ Base Position = 5.0% (standard full position)
 
 You have full discretion to override the formula position by up to **+150%** based on exceptional factors. One strong reason can justify a large override - it's about the **STRENGTH** of the insight, not counting checkboxes.
 
+**IMPORTANT: Avoid Double-Counting Valuation**
+The Opportunity Adjustment already accounts for valuation (upside to fair value). When considering 
+overrides, focus on factors NOT captured by the formula:
+- Business quality that exceeds what scores suggest (hidden moat strength)
+- Structural advantages the market underappreciates
+- Management capital allocation excellence beyond metrics
+- Secular tailwinds creating long runway
+- Market structure changes or upcoming catalysts
+
+Do NOT override simply because "it's cheap" - that's already in the Opportunity Adjustment.
+
 **Understanding Override Magnitudes** (Examples, NOT rules):
 
 **15-30% Override Examples:**
-- A company with 40%+ ROIC that the formula underweights
-- Zero debt in a capital-intensive industry
-- Dominant market position (>60% share) with pricing power
+- A company with 40%+ ROIC that the formula underweights (quality signal)
+- Zero debt in a capital-intensive industry (fortress balance sheet beyond formula)
+- Dominant market position (>60% share) with unrecognized pricing power
 
 **30-60% Override Examples:**
-- Network effects moat that creates winner-take-most dynamics
+- Network effects moat creating winner-take-most dynamics (not fully in risk score)
 - Secular tailwind so strong it overshadows formula risks (e.g., AI infrastructure boom)
-- Management with exceptional 10+ year capital allocation track record
+- Management with exceptional 10+ year capital allocation track record (ROIC >25%)
 
 **60-100% Override Examples:**
 - Market completely mispricing due to temporary issue (hidden value >50%)

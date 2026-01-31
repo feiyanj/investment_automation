@@ -270,6 +270,18 @@ Consider multiple factors (do NOT use a static assumption):
 - Companies < $50B: Can sustain 15-25% if in right industries
 - **Size constraint**: [Impact on growth ceiling]
 
+**Moat & Quality Growth Ceiling Adjustment**:
+CRITICAL: High-quality companies with strong moats can sustain growth longer than average:
+- Strong Moat + Quality 9-10: Add +2-4% to growth ceiling (e.g., 10% → 12-14%)
+- Medium Moat + Quality 7-8: Add +1-2% to growth ceiling (e.g., 10% → 11-12%)
+- Weak/No Moat: Use base ceiling (no adjustment)
+
+**Rationale**: Companies with durable competitive advantages (network effects, switching costs, 
+brand power) can grow faster and sustain growth longer than commodity businesses. Amazon sustained 
+20%+ revenue growth to $1T+ market cap due to platform network effects. Apple maintained 15%+ 
+growth at $500B+ due to ecosystem lock-in. Traditional DCF often undervalues quality growth by 
+applying generic ceilings that ignore competitive positioning.
+
 **Industry Dynamics**:
 - Industry growth rate: Estimate based on GDP, sector trends
 - Company's market share: ___% (room to gain share?)
@@ -277,7 +289,7 @@ Consider multiple factors (do NOT use a static assumption):
 - **Industry ceiling**: [How does this limit growth?]
 
 **YOUR GROWTH RATE FOR DCF**: ___%
-**Justification**: [3-4 sentences explaining your choice]
+**Justification**: [3-4 sentences explaining your choice, including any Moat/Quality adjustments]
 
 ---
 
@@ -308,15 +320,28 @@ Build up WACC from components:
 - Debt/Equity 0.5-1.0: +0.5-1%
 - Debt/Equity < 0.5: 0%
 
+**Quality Discount (GARP Adjustment)**:
+CRITICAL: If you assessed this company as high-quality with strong moat, REDUCE the WACC:
+- Quality Score 9-10 + Strong Moat: -2.0% (exceptional quality premium)
+- Quality Score 8-9 + Strong Moat: -1.5% (high quality premium)
+- Quality Score 7-8 + Medium Moat: -1.0% (good quality premium)
+- Quality Score < 7 or Weak/No Moat: 0% (no discount)
+
+**Rationale**: Warren Buffett's actual investment approach. High-quality businesses with durable 
+moats (Apple, Coca-Cola, See's Candies) deserve lower discount rates because their cash flows 
+are more predictable and defensible. This is NOT "paying any price" - it's recognizing that a 
+company with 50%+ ROIC and network effects has genuinely lower risk than a commodity business. 
+Traditional Graham-style value investing ignored quality; modern Buffett-style incorporates it.
+
 **WACC CALCULATION**:
-Cost of Equity = Risk-Free Rate + (Beta × Equity Risk Premium) + Size Premium + Risk Premium
-Cost of Equity = ___% + (___% × ___%) + ___% + ___% = ___%
+Cost of Equity = Risk-Free Rate + (Beta × Equity Risk Premium) + Size Premium + Risk Premium - Quality Discount
+Cost of Equity = ___% + (___% × ___%) + ___% + ___% - ___% = ___%
 
 If company has debt:
 WACC = (E/V × Cost of Equity) + (D/V × Cost of Debt × (1 - Tax Rate))
 
 **YOUR WACC**: ___%
-**Justification**: [2-3 sentences]
+**Justification**: [2-3 sentences explaining components, especially Quality Discount if applied]
 
 ---
 

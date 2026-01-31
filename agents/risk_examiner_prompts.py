@@ -239,14 +239,91 @@ Assess 5 categories of business model vulnerability:
 
 ---
 
-**TOTAL BUSINESS MODEL RISK SCORE: ___/50**
-(Average of 5 category scores)
+### 2.6 Macro Environment Risk (Score 0-10)
+
+Assess current macroeconomic headwinds/tailwinds specific to THIS company:
+
+**Interest Rate Environment**:
+- Current Fed Funds Rate: ___%
+- Current 10-Year Treasury: ___%
+- Rate trend: Rising / Stable / Falling
+- Company's total debt: $___ billion at ___% average interest rate
+- Interest coverage: ___x (EBIT / Interest Expense)
+- Debt maturity: $___ billion maturing in next 2 years (refinancing risk)
+- **Business model rate sensitivity**:
+  - Banks/Financials: BENEFIT from rising rates (net interest margin expansion)
+  - Real Estate/REITs/Utilities: HURT by rising rates (higher cap rates, lower valuations)
+  - Highly leveraged companies: HURT by rising rates (interest expense increase)
+  - Asset-light tech/services: NEUTRAL to rates
+- **Rate Risk Assessment**: ___/3 points
+  - 0 = Favorable rate environment or insulated from rates
+  - 1-2 = Neutral impact or manageable exposure
+  - 3 = Significant headwind from rate environment
+
+**Economic Cycle Position**:
+- **Current cycle stage**: Early Cycle / Mid-Cycle / Late Cycle / Recession
+  - Early: Recovery from recession, unemployment falling, credit expanding
+  - Mid: Sustained growth, moderate inflation, stable policy
+  - Late: Peak growth, rising inflation, Fed tightening, yield curve flattening
+  - Recession: Contracting GDP, rising unemployment, credit stress
+- **Company's cyclicality**:
+  - Highly Cyclical: Industrials, Materials, Consumer Discretionary, Autos, Luxury
+  - Moderately Cyclical: Financials, Technology, Energy
+  - Defensive: Healthcare, Consumer Staples, Utilities
+  - Counter-Cyclical: Discount retailers, bankruptcy services
+- **Historical performance in this cycle stage**: [Check 5-year data if includes previous cycle]
+  - Did revenue/margins expand or contract in last downturn?
+  - How long did recovery take?
+- **Leading economic indicators**: 
+  - PMI (Purchasing Managers Index): Above 50 (expansion) or Below 50 (contraction)
+  - Unemployment trend: Falling (healthy) or Rising (weakness)
+  - Consumer confidence: Rising or Falling
+- **Cycle Risk Assessment**: ___/4 points
+  - 0 = Defensive business in healthy economy
+  - 1-2 = Moderate cyclicality or mid-cycle positioning
+  - 3-4 = Highly cyclical business in late cycle or recession
+
+**Sector-Specific Macro Factors**:
+- **Commodity exposure**: 
+  - Oil/Gas: Current WTI $___/barrel (vs 5-yr avg $___)
+  - Metals: Copper, Steel, Aluminum prices (rising/stable/falling)
+  - Agriculture: Grain, Livestock prices
+  - Impact: Input cost HEADWIND / NEUTRAL / TAILWIND
+- **Currency exposure**:
+  - Revenue mix: ___% US, ___% Europe, ___% Asia, ___% Other
+  - USD strength: DXY Index ___ (rising USD hurts multinationals)
+  - Net currency impact: HEADWIND / NEUTRAL / TAILWIND
+- **Regulatory/Political risks**:
+  - Upcoming elections: US/China/Europe political uncertainty
+  - Trade policy: Tariffs, trade tensions (esp. US-China)
+  - Industry-specific: Drug pricing, tech regulation, ESG mandates
+  - Geopolitical: War, sanctions, supply chain disruptions
+- **Sector Macro Assessment**: ___/3 points
+  - 0 = Multiple tailwinds or insulated from macro factors
+  - 1-2 = Mixed or neutral macro environment
+  - 3 = Multiple headwinds creating sector pressure
+
+**Your Macro Risk Assessment**:
+- Interest Rate Risk: ___/3
+- Economic Cycle Risk: ___/4
+- Sector-Specific Macro Risk: ___/3
+- **Total Macro Environment Risk Score**: ___/10
+
+**Macro Risk Narrative** (3-4 sentences):
+[Summarize: Is the current macro environment favorable, neutral, or unfavorable for THIS specific company? 
+What is the single biggest macro risk or tailwind? What's the likely timeline for this risk to materialize 
+or resolve (next 6 months, 1 year, 2+ years)? How does this compare to typical conditions for this sector?]
+
+---
+
+**TOTAL BUSINESS MODEL RISK SCORE: ___/60**
+(Sum of 6 category scores: Competition ___/10 + Customer ___/10 + Regulatory ___/10 + Technology ___/10 + Supply Chain ___/10 + Macro ___/10)
 
 **Interpretation**:
-- 0-10: Low business model risk (resilient)
-- 11-20: Moderate risk (manageable)
-- 21-35: High risk (requires premium returns)
-- 36-50: Extreme risk (avoid or speculative only)
+- 0-15: Low business model risk (resilient across scenarios)
+- 16-30: Moderate risk (manageable with monitoring)
+- 31-45: High risk (requires premium returns to justify)
+- 46-60: Extreme risk (avoid or only with exceptional upside)
 
 ================================================================================
 ## 3. MANAGEMENT & GOVERNANCE RISKS
@@ -483,7 +560,7 @@ Synthesize all risk factors:
 
 **Component Scores**:
 - Financial Red Flags Impact: ___/10 (0 flags = 0, 1-2 = 3, 3-5 = 6, >5 = 9)
-- Business Model Risk: ___/10 (from section 2)
+- Business Model Risk: ___/10 (from section 2: Total Score ___/60, normalized to 0-10 scale = score/6)
 - Management/Governance Risk: ___/10 (Low = 2, Medium = 5, High = 8)
 - Valuation Risk: ___/10 (Low = 2, Medium = 5, High = 8)
 - Bear Case Severity: ___/10 (Expected downside: <15% = 2, 15-30% = 5, >30% = 8)

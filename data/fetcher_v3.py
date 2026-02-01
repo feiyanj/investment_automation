@@ -945,18 +945,50 @@ Key Quality Metrics:
             
             # Validate P/E ratio
             trailing_pe = company_info.get('trailingPE')
+            forward_pe = company_info.get('forwardPE')
+            trailing_eps = company_info.get('trailingEps')
             current_price = company_info.get('currentPrice', 0)
             
+            # Show P/E context (always mention Forward P/E if available)
             if trailing_pe is not None:
+                pe_msg = f"Trailing P/E: {trailing_pe:.1f}x"
+                if forward_pe is not None:
+                    pe_msg += f", Forward P/E: {forward_pe:.1f}x"
+                    
                 if trailing_pe < 3:
-                    print(f"    ⚠️  WARNING: Extremely low P/E ratio ({trailing_pe:.1f}x)")
+                    print(f"    ⚠️  WARNING: Extremely low P/E ratio ({pe_msg})")
                     print(f"    └─ This may indicate data quality issues or terminal business decline")
                 elif trailing_pe > 200:
-                    print(f"    ⚠️  WARNING: Extremely high P/E ratio ({trailing_pe:.1f}x)")
+                    print(f"    ⚠️  WARNING: Extremely high P/E ratio ({pe_msg})")
                     print(f"    └─ Company may be unprofitable or in hyper-growth phase")
+                else:
+                    # Normal range - still show both P/Es for context
+                    if forward_pe is not None and abs(trailing_pe - forward_pe) / trailing_pe > 0.25:
+                        # Significant divergence (>25% difference)
+                        print(f"    ℹ️  NOTE: {pe_msg}")
+                        if forward_pe < trailing_pe:
+                            improvement = ((trailing_pe - forward_pe) / trailing_pe * 100)
+                            print(f"    └─ Earnings expected to improve {improvement:.0f}% (Forward P/E compression)")
+                        else:
+                            deterioration = ((forward_pe - trailing_pe) / trailing_pe * 100)
+                            print(f"    └─ Earnings expected to decline {deterioration:.0f}% (Forward P/E expansion)")
             else:
-                print(f"    ⚠️  WARNING: P/E ratio not available from data provider")
-                print(f"    └─ Analysts will need to calculate manually from financials")
+                # Trailing P/E not available
+                if trailing_eps is not None and trailing_eps < 0:
+                    # Company is unprofitable
+                    if forward_pe is not None:
+                        print(f"    ℹ️  NOTE: Company currently unprofitable (Trailing EPS: ${trailing_eps:.2f})")
+                        print(f"    └─ Forward P/E: {forward_pe:.1f}x - analysts expect profitability")
+                    else:
+                        print(f"    ⚠️  WARNING: Company unprofitable with no forward P/E guidance")
+                        print(f"    └─ High-risk growth stock - valuation will rely on revenue multiples")
+                else:
+                    # No P/E data at all
+                    if forward_pe is not None:
+                        print(f"    ℹ️  NOTE: Trailing P/E not available, Forward P/E: {forward_pe:.1f}x")
+                    else:
+                        print(f"    ⚠️  WARNING: P/E ratio not available from data provider")
+                        print(f"    └─ Analysts will need to calculate manually from financials")
             
             # Validate EPS data
             trailing_eps = company_info.get('trailingEps')

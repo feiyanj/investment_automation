@@ -192,16 +192,16 @@ class CIOSynthesizer(BaseAgent):
         
         try:
             # Extract Position Size (from EXECUTIVE SUMMARY)
-            # Table format: "| Position Size | 5-7% |"
+            # Table format: "| Position Size | 5-7% |" or "| **Position Size** | **4.7%** |"
             position_match = re.search(
-                r'\|[^|]*Position\s+Size[^|]*\|[^|]*(\d+(?:\.\d+)?)[^|]*%',
+                r'\|[^|]*\*?\*?Position\s+Size\*?\*?[^|]*\|[^|]*\*?\*?(\d+(?:\.\d+)?)\*?\*?[^|]*%',
                 exec_summary or full_synthesis,
                 re.IGNORECASE
             )
             if not position_match:
-                # Plain text format
+                # Plain text format with markdown bold
                 position_match = re.search(
-                    r'\*?\*?(?:Recommended Position(?:\s+Size)?|Position Size|FINAL POSITION)\*?\*?:\s*(\d+(?:\.\d+)?)%',
+                    r'\*?\*?(?:Recommended Position(?:\s+Size)?|Position Size|FINAL POSITION)\*?\*?:\s*\*?\*?(\d+(?:\.\d+)?)%?\*?\*?',
                 exec_summary or full_synthesis,
                 re.IGNORECASE
             )
@@ -265,33 +265,33 @@ class CIOSynthesizer(BaseAgent):
                     summary['composite_score'] = float(composite_match.group(1))
             
             # Extract CIO Fair Value
-            # Table format: "| CIO Fair Value | $225.50 |"
+            # Table format: "| CIO Fair Value | $225.50 |" or "| **CIO Fair Value** | $145.00 |"
             fair_value_match = re.search(
-                r'\|[^|]*CIO\s+Fair\s+Value[^|]*\|[^|]*\$(\d+(?:\.\d+)?)',
+                r'\|[^|]*\*?\*?CIO\s+Fair\s+Value\*?\*?[^|]*\|[^|]*\$(\d+(?:,\d{3})*(?:\.\d+)?)',
                 exec_summary or full_synthesis,
                 re.IGNORECASE
             )
             if not fair_value_match:
-                # Plain text format
+                # Plain text format with markdown bold
                 fair_value_match = re.search(
-                    r'CIO Fair Value:\s*\$(\d+(?:\.\d+)?)',
+                    r'\*?\*?CIO Fair Value\*?\*?:\s*\$(\d+(?:,\d{3})*(?:\.\d+)?)',
                     full_synthesis,
                     re.IGNORECASE
                 )
             if fair_value_match:
-                summary['cio_fair_value'] = float(fair_value_match.group(1))
+                summary['cio_fair_value'] = float(fair_value_match.group(1).replace(',', ''))
             
             # Extract Upside to Fair Value
-            # Table format: "| Upside to Fair Value | 15.2% |"
+            # Table format: "| Upside to Fair Value | +15.2% |" or "| **Upside to Fair Value** | +23.9% |"
             upside_match = re.search(
-                r'\|[^|]*Upside\s+to\s+Fair\s+Value[^|]*\|[^|]*(-?\d+(?:\.\d+)?)%',
+                r'\|[^|]*\*?\*?Upside\s+to\s+Fair\s+Value\*?\*?[^|]*\|[^|]*([+-]?\d+(?:\.\d+)?)%',
                 exec_summary or full_synthesis,
                 re.IGNORECASE
             )
             if not upside_match:
-                # Plain text format
+                # Plain text format with markdown bold
                 upside_match = re.search(
-                    r'Upside to Fair Value:\s*(-?\d+(?:\.\d+)?)%',
+                    r'\*?\*?Upside to Fair Value\*?\*?:\s*([+-]?\d+(?:\.\d+)?)%',
                     full_synthesis,
                     re.IGNORECASE
                 )

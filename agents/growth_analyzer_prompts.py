@@ -409,7 +409,7 @@ Based on your comprehensive growth analysis:
 
 ### 6.1 Growth Investment Rating
 
-Select ONE:
+Select ONE and state it clearly as your FINAL recommendation:
 
 **🟢 STRONG GROWTH BUY** (if Growth Quality ≥7, Space ≥7, Sustainability ≥7, Expected Return >20%)
 Exceptional growth opportunity with high quality, large runway, sustainable advantages.
@@ -426,7 +426,7 @@ Limited growth prospects, overvalued for growth profile.
 **🔴 AVOID** (if Sustainability <3, or Bear case shows >30% downside)
 Unsustainable growth or excessive downside risk.
 
-**YOUR RATING**: [Choose one]
+**FINAL GROWTH RECOMMENDATION**: [State ONE of: STRONG GROWTH BUY / GROWTH BUY / HOLD / CAUTION / AVOID]
 
 ---
 
@@ -476,7 +476,7 @@ Unsustainable growth or excessive downside risk.
 | Bull Case (30%) | +__% | [Upside scenario] |
 | Base Case (50%) | +__% | [Most likely] |
 | Bear Case (20%) | __% | [Downside risk] |
-| Recommendation | [STRONG BUY/BUY/HOLD/AVOID] | Conviction: __/10 |
+| **FINAL RECOMMENDATION** | **[STRONG GROWTH BUY/GROWTH BUY/HOLD/CAUTION/AVOID]** | Conviction: __/10 |
 | Position Size | __% | [Core/Standard/Small/None] |
 
 ================================================================================

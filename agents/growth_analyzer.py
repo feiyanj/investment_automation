@@ -126,6 +126,11 @@ class GrowthAnalyzer(BaseAgent):
                     match = re.search(r'(\d+)/10', line)
                     if match:
                         summary['historical_quality_score'] = int(match.group(1))
+                # Format 4: Plain text "Historical Quality: 5/10"
+                elif 'HISTORICAL QUALITY:' in line_upper and '/' in line:
+                    match = re.search(r'(\d+)/10', line)
+                    if match:
+                        summary['historical_quality_score'] = int(match.group(1))
             
             # Extract Market Space Score
             if not summary['market_space_score']:
@@ -141,30 +146,44 @@ class GrowthAnalyzer(BaseAgent):
                     if match:
                         summary['sustainability_score'] = int(match.group(1))
             
-            # Extract Recommendation (table or plain text)
+            # Extract Recommendation (prioritize FINAL recommendation, then table, then plain text)
             if not summary['recommendation']:
-                # Table format: "| Recommendation | HOLD | Conviction: 6/10 |"
-                if '|' in line and 'RECOMMENDATION' in line_upper:
+                # Priority 1: Look for "FINAL GROWTH RECOMMENDATION:" or "FINAL RECOMMENDATION:"
+                if ('FINAL' in line_upper and 'RECOMMENDATION' in line_upper) or \
+                   ('**FINAL RECOMMENDATION**' in line):
+                    # Check in order of specificity (longest matches first to avoid partial matches)
                     if 'STRONG GROWTH BUY' in line_upper or 'STRONG BUY' in line_upper:
                         summary['recommendation'] = 'STRONG GROWTH BUY'
-                    elif 'GROWTH BUY' in line_upper or 'BUY' in line_upper:
+                    elif 'GROWTH BUY' in line_upper:
                         summary['recommendation'] = 'GROWTH BUY'
+                    elif 'HOLD' in line_upper or 'SELECTIVE BUY' in line_upper:
+                        summary['recommendation'] = 'HOLD'
                     elif 'CAUTION' in line_upper:
                         summary['recommendation'] = 'CAUTION'
                     elif 'AVOID' in line_upper:
                         summary['recommendation'] = 'AVOID'
-                    elif 'HOLD' in line_upper:
+                # Priority 2: Table format: "| Recommendation | HOLD | Conviction: 6/10 |"
+                elif '|' in line and 'RECOMMENDATION' in line_upper:
+                    if 'STRONG GROWTH BUY' in line_upper or 'STRONG BUY' in line_upper:
+                        summary['recommendation'] = 'STRONG GROWTH BUY'
+                    elif 'GROWTH BUY' in line_upper:
+                        summary['recommendation'] = 'GROWTH BUY'
+                    elif 'HOLD' in line_upper or 'SELECTIVE BUY' in line_upper:
                         summary['recommendation'] = 'HOLD'
-                # Plain text or emoji format
-                elif '🟢 STRONG GROWTH BUY' in line or 'STRONG GROWTH BUY' in line_upper:
+                    elif 'CAUTION' in line_upper:
+                        summary['recommendation'] = 'CAUTION'
+                    elif 'AVOID' in line_upper:
+                        summary['recommendation'] = 'AVOID'
+                # Priority 3: Plain text or emoji format
+                elif '🟢 STRONG GROWTH BUY' in line or ('🟢' in line and 'STRONG' in line_upper):
                     summary['recommendation'] = 'STRONG GROWTH BUY'
-                elif '🟢 GROWTH BUY' in line or 'GROWTH BUY' in line_upper:
+                elif '🟢 GROWTH BUY' in line or ('🟢' in line and 'GROWTH BUY' in line_upper):
                     summary['recommendation'] = 'GROWTH BUY'
-                elif '🟡 HOLD' in line or 'HOLD/SELECTIVE BUY' in line_upper:
+                elif '🟡 HOLD' in line or ('🟡' in line and 'HOLD' in line_upper):
                     summary['recommendation'] = 'HOLD'
-                elif '🟠 CAUTION' in line or 'CAUTION' in line_upper:
+                elif '🟠 CAUTION' in line or ('🟠' in line and 'CAUTION' in line_upper):
                     summary['recommendation'] = 'CAUTION'
-                elif '🔴 AVOID' in line or 'AVOID' in line_upper:
+                elif '🔴 AVOID' in line or ('🔴' in line and 'AVOID' in line_upper):
                     summary['recommendation'] = 'AVOID'
             
             # Extract Conviction Level (from table or plain text)
